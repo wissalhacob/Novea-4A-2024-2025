@@ -1,25 +1,20 @@
-import { createScene } from './scene';
-import { createRoad } from './road';
+import { createScene } from './scene';  // Importer la fonction pour créer la scène
+import { createRoad } from './route';  // Importer la fonction pour créer la route
 
 // Fonction principale pour démarrer la scène
 function main() {
-  // Créer la scène en appelant la fonction createScene()
   const { scene, camera, renderer } = createScene();
 
-  // Créer la route et l'ajouter à la scène
-  createRoad(scene);
+  // Ajouter la route à la scène
+  createRoad(scene);  // Passer la scène à la fonction
 
   // Fonction d'animation
   function animate() {
-    // Vous pouvez ajouter d'autres animations ici si nécessaire
     renderer.render(scene, camera);
-    requestAnimationFrame(animate); // Demande de la prochaine image
+    requestAnimationFrame(animate);
   }
 
-  // Démarrer l'animation
   animate();
-
 }
 
-// Appeler la fonction main pour lancer le processus
 main();

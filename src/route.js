@@ -1,3 +1,5 @@
+// route.js
+import { scene } from './scene';  // Assurez-vous que 'scene' est bien exportée de scene.js
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -5,7 +7,7 @@ export function createRoad() {
   const loader = new GLTFLoader();
   
   loader.load(
-    '/public/models/source/g.glb',  // Le chemin vers votre modèle 3D
+    '/models/source/g.glb',
     (gltf) => {
       const road = gltf.scene;
       road.scale.set(1, 1, 1);  // Redimensionner si nécessaire
