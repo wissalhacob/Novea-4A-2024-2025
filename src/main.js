@@ -1,9 +1,13 @@
-import { createScene } from './scene';  // Importer la fonction pour créer la scène
+import { createScene } from './scene';
+import { createRoad } from './road';
 
 // Fonction principale pour démarrer la scène
 function main() {
   // Créer la scène en appelant la fonction createScene()
   const { scene, camera, renderer } = createScene();
+
+  // Créer la route et l'ajouter à la scène
+  createRoad(scene);
 
   // Fonction d'animation
   function animate() {
@@ -14,6 +18,7 @@ function main() {
 
   // Démarrer l'animation
   animate();
+
 }
 
 // Appeler la fonction main pour lancer le processus
