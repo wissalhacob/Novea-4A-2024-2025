@@ -1,20 +1,30 @@
-import { createScene } from './scene';  // Importer la fonction pour créer la scène
+// Importation des fonctions nécessaires depuis d'autres modules JavaScript.
+// `createScene` est une fonction qui configure la scène 3D, la caméra et le renderer.
 
-// Fonction principale pour démarrer la scène
+import { createScene } from './scene'; 
+
+
+// Fonction principale qui initie et gère le rendu de la scène.
 function main() {
-  // Créer la scène en appelant la fonction createScene()
+  // Création de la scène, de la caméra et du renderer via la fonction `createScene`.
+  // Ces éléments sont retournés sous forme d'un objet destructuré.
   const { scene, camera, renderer } = createScene();
 
-  // Fonction d'animation
+
+
+  // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
-    // Vous pouvez ajouter d'autres animations ici si nécessaire
+    // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.
     renderer.render(scene, camera);
-    requestAnimationFrame(animate); // Demande de la prochaine image
+
+    // Planifie l'exécution continue de la fonction `animate` grâce à `requestAnimationFrame`.
+    // Cela permet d'obtenir une animation fluide (synchronisée avec le rafraîchissement de l'écran).
+    requestAnimationFrame(animate);
   }
 
-  // Démarrer l'animation
+  // Démarre l'animation en appelant la fonction `animate`.
   animate();
 }
 
-// Appeler la fonction main pour lancer le processus
+// Appel de la fonction principale `main` pour lancer l'application.
 main();
