@@ -15,7 +15,6 @@ function main() {
   // La fonction prend la scène comme argument pour y ajouter des objets.
   createRoad(scene);
   create_lumiere_ui(scene)
-  create_person(scene)
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.
@@ -25,6 +24,13 @@ function main() {
     // Cela permet d'obtenir une animation fluide (synchronisée avec le rafraîchissement de l'écran).
     requestAnimationFrame(animate);
   }
+
+  window.addEventListener("resize", function() {
+    camera.aspect = window.innerWidth / this.window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  
 
   // Démarre l'animation en appelant la fonction `animate`.
   animate();
