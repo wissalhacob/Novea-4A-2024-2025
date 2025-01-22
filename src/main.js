@@ -2,8 +2,8 @@
 // `createScene` est une fonction qui configure la scène 3D, la caméra et le renderer.
 // `createRoad` est une fonction qui ajoute une route ou un objet similaire à la scène.
 import { createScene } from './scene'; 
-import { createRoad } from './route';
-
+import { createRoad } from './rue';
+import {create_lumiere_ui} from './lumiere_settings';
 // Fonction principale qui initie et gère le rendu de la scène.
 function main() {
   // Création de la scène, de la caméra et du renderer via la fonction `createScene`.
@@ -13,7 +13,7 @@ function main() {
   // Appel de la fonction `createRoad` pour ajouter un élément (route) à la scène.
   // La fonction prend la scène comme argument pour y ajouter des objets.
   createRoad(scene);
-
+  create_lumiere_ui(scene)
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.

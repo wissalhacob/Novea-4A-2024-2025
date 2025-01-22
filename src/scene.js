@@ -3,7 +3,7 @@ import * as THREE from 'three'; // Importation de toutes les fonctionnalités n�
 export function createScene() {
   // Création d'une nouvelle scène 3D
   const scene = new THREE.Scene();
-  
+  scene.background = new THREE.Color(0x87ceeb); // Bleu ciel
   // Création d'une caméra perspective
   // - Champ de vision : 75°
   // - Ratio largeur/hauteur basé sur la taille de la fenêtre
