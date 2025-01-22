@@ -4,16 +4,24 @@
 import { createScene } from './scene'; 
 import { createRoad } from './rue';
 import {create_lumiere_ui} from './lumiere_settings';
+
 // Fonction principale qui initie et gère le rendu de la scène.
 function main() {
   // Création de la scène, de la caméra et du renderer via la fonction `createScene`.
   // Ces éléments sont retournés sous forme d'un objet destructuré.
   const { scene, camera, renderer } = createScene();
-
+  
   // Appel de la fonction `createRoad` pour ajouter un élément (route) à la scène.
   // La fonction prend la scène comme argument pour y ajouter des objets.
-  createRoad(scene);
+  const { updateSolarPanelInclinaison } = createRoad(scene);
   create_lumiere_ui(scene)
+ // Interface utilisateur pour l'inclinaison du panneau solaire
+ const inclinaisonSelect = document.getElementById('inclinaison');
+ inclinaisonSelect.addEventListener('change', (event) => {
+   const angle = parseInt(event.target.value); // Récupère l'inclinaison sélectionnée
+   updateSolarPanelInclinaison(angle); // Met à jour l'inclinaison du panneau solaire
+ });
+  
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.

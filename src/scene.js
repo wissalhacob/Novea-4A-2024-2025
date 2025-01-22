@@ -34,12 +34,12 @@ export function createScene() {
   const MAX_CAMERA_RADIUS = 5; // Distance maximum entre la caméra et l'origine
 
   const cameraOrigin = new THREE.Vector3(0, 0, 0); // Point que la caméra regarde
-  let cameraRadius = 3; // Distance initiale entre la caméra et l'origine
+  let cameraRadius = 10; // Distance initiale entre la caméra et l'origine
   let cameraAzimuth = 225; // Angle horizontal initial (azimut) de la caméra
   let cameraElevation = 45; // Angle vertical initial (élévation) de la caméra
 
   // Position initiale de la caméra
-  camera.position.set(0, cameraRadius, 10);
+  camera.position.set(0, cameraRadius, 20);
   camera.lookAt(cameraOrigin);
 
   // Fonction pour mettre à jour la position de la caméra en fonction des paramètres

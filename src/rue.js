@@ -20,7 +20,14 @@ export function createRoad(scene) {
     // Créer un modèle de lampadaire 
     function createLampPost(x, z) {
     const group = new THREE.Group();
-
+    
+      // Base du lampadaire
+    const baseGeometry = new THREE.CylinderGeometry(1, 1, 0.5, 16); // Créer une base pour le lampadaire (cylindre)
+    const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
+    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+    base.position.y = 0.25; // Positionner la base juste au-dessus du sol
+    base.castShadow = true;
+    group.add(base); // Ajouter la base au groupe
     // Poteau du lampadaire
     const poleGeometry = new THREE.CylinderGeometry(0.2, 0.2, 8, 16);
     const poleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
@@ -38,17 +45,28 @@ export function createRoad(scene) {
     solarPanel.castShadow = true;
     group.add(solarPanel);
 
-    // Batterie (base du lampadaire)
-    const batteryGeometry = new THREE.BoxGeometry(1, 0.5, 1);
-    const batteryMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
-    const battery = new THREE.Mesh(batteryGeometry, batteryMaterial);
-    battery.position.set(0, 0.25, 0);
-    battery.castShadow = true;
-    group.add(battery);
+    
+   
 
     group.position.set(x, 0, z);
     return group;
     }
+     // Fonction pour mettre à jour l'inclinaison des panneaux solaires
+  function updateSolarPanelInclinaison(angle) {
+    scene.traverse((child) => {
+      if (child instanceof THREE.Group && child.children.length > 0) {
+        // Vérifie si c'est le groupe du panneau solaire
+        child.children.forEach((object) => {
+          if (object instanceof THREE.Mesh && object.geometry.type === "BoxGeometry") {
+            // Mettre à jour seulement l'inclinaison du panneau solaire
+            if (object.rotation) {
+              object.rotation.x = THREE.MathUtils.degToRad(angle);  // Convertir en radians
+            }
+          }
+        });
+      }
+    });
+  }
 
     // Ajouter un lampadaire à chaque côté de la route
     for (let i = -20; i <= 20; i += 10) {
@@ -58,5 +76,8 @@ export function createRoad(scene) {
     const lampPostRight = createLampPost(5, i);
     scene.add(lampPostRight);
     }
+    
+      // Retourner la fonction pour mettre à jour l'inclinaison
+     return { updateSolarPanelInclinaison };
 
 }
