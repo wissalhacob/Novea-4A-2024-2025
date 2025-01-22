@@ -22,6 +22,7 @@ function main() {
     updateSolarPanelInclinaison(angle); // Met à jour l'inclinaison du panneau solaire
   });
   
+
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.
@@ -33,6 +34,14 @@ function main() {
   }
 
   // Démarre l'animation en appelant la fonction animate.
+  window.addEventListener("resize", function() {
+    camera.aspect = window.innerWidth / this.window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  
+
+  // Démarre l'animation en appelant la fonction `animate`.
   animate();
 }
 
