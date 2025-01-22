@@ -15,6 +15,7 @@ function main() {
   // La fonction prend la scène comme argument pour y ajouter des objets.
   createRoad(scene);
   create_lumiere_ui(scene)
+  create_person(scene)
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.
