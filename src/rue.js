@@ -20,8 +20,8 @@ export function createRoad(scene) {
     // Créer un modèle de lampadaire 
     function createLampPost(x, z) {
     const group = new THREE.Group();
-    
-      // Base du lampadaire
+
+    // Base du lampadaire
     const baseGeometry = new THREE.CylinderGeometry(1, 1, 0.5, 16); // Créer une base pour le lampadaire (cylindre)
     const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
     const base = new THREE.Mesh(baseGeometry, baseMaterial);
@@ -35,19 +35,16 @@ export function createRoad(scene) {
     pole.position.y = 4;
     pole.castShadow = true;
     group.add(pole);
-
+    
+        
     // Panneau solaire
-    const solarPanelGeometry = new THREE.BoxGeometry(2, 0.1, 1);
+    const solarPanelGeometry = new THREE.BoxGeometry(2, 0.01, 1);
     const solarPanelMaterial = new THREE.MeshStandardMaterial({ color: 0x123456 });
     const solarPanel = new THREE.Mesh(solarPanelGeometry, solarPanelMaterial);
     solarPanel.position.set(0, 8, 0);
     solarPanel.rotation.x = -Math.PI / 6;
     solarPanel.castShadow = true;
     group.add(solarPanel);
-
-    
-   
-
     group.position.set(x, 0, z);
     return group;
     }
