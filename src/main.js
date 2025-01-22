@@ -4,7 +4,9 @@
 import { createScene } from './scene'; 
 import { createRoad } from './rue';
 import {create_lumiere_ui} from './lumiere_settings';
-import {create_person} from './person'
+import {create_person} from './person';
+import {create_person_coté} from './person';
+import {create_car} from './car';
 // Fonction principale qui initie et gère le rendu de la scène.
 function main() {
   // Création de la scène, de la caméra et du renderer via la fonction `createScene`.
@@ -16,6 +18,8 @@ function main() {
   createRoad(scene);
   create_lumiere_ui(scene)
   create_person(scene)
+  create_person_coté(scene)
+  create_car(scene)
   // Fonction d'animation appelée en boucle pour rendre la scène en continu.
   function animate() {
     // Affiche la scène dans le renderer en utilisant la caméra pour déterminer le point de vue.
