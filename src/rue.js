@@ -2,21 +2,21 @@ import * as THREE from 'three'; // Importation de toutes les fonctionnalités n�
 import {create_panneaux_sol} from './panneaux_sol'
 
 export function createRoad(scene) {
-    // géométrie de route 
-    const roadGeometry = new THREE.BoxGeometry(12, 0.1, 50);
-    const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
-    const road = new THREE.Mesh(roadGeometry, roadMaterial);
-    road.position.y = 0.05;
-    road.receiveShadow = true;
-    scene.add(road);
+  // Création de la route
+  const roadGeometry = new THREE.BoxGeometry(12, 0.1, 50);
+  const roadMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+  const road = new THREE.Mesh(roadGeometry, roadMaterial);
+  road.position.y = 0.05;
+  road.receiveShadow = true;
+  scene.add(road);
 
-    // Créer un sol 
-    const groundGeometry = new THREE.BoxGeometry(100, 0.1, 100);
-    const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x228b22 });
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.position.y = -0.05;
-    ground.receiveShadow = true;
-    scene.add(ground);
+  // Création du sol
+  const groundGeometry = new THREE.BoxGeometry(100, 0.1, 100);
+  const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x228b22 });
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  ground.position.y = -0.05;
+  ground.receiveShadow = true;
+  scene.add(ground);
 
     // Créer un modèle de lampadaire 
     function createLampPost(x, z) {
