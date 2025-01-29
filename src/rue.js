@@ -42,35 +42,40 @@ export function createRoad(scene) {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Créer un modèle de lampadaire
   function createLampPost(x, z) {
     const group = new THREE.Group();
-
+  
     const baseGeometry = new THREE.CylinderGeometry(1, 1, 0.5, 30);
     const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
     const base = new THREE.Mesh(baseGeometry, baseMaterial);
     base.position.y = 0.25;
     base.castShadow = true;
+    base.receiveShadow = true;
     group.add(base);
-
+  
     const poleGeometry = new THREE.CylinderGeometry(0.2, 0.2, 8, 16);
     const poleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
     const pole = new THREE.Mesh(poleGeometry, poleMaterial);
     pole.position.y = 4;
     pole.castShadow = true;
+    pole.receiveShadow = true;
     group.add(pole);
-
-    // Ajout du panneau solaire
+  
+    // Assurez-vous que le panneau solaire et la lampe peuvent également projeter des ombres
     const { solarPanel } = create_panneaux_sol(scene);
+    solarPanel.castShadow = true;
+    solarPanel.receiveShadow = true;
     group.add(solarPanel);
-
-    // Ajouter les lampes
+  
     const { lampe } = create_lampes(scene);
+    lampe.castShadow = true;
+    lampe.receiveShadow = true;
     group.add(lampe);
-
+  
     group.position.set(x, 0, z);
     return { group }; // Retourner aussi le groupe pour la manipulation
   }
+  
 
   // Ajouter un lampadaire à chaque côté de la route et stocker les LED
   const lampPosts = [];
@@ -78,6 +83,7 @@ export function createRoad(scene) {
   for (let i = -20; i <= 20; i += 10) {
     const { group, led } = createLampPost(-5, i);
     scene.add(group);
+    group.castShadow=true
     lampPosts.push(group);
 
     const { group: groupRight } = createLampPost(5, i);

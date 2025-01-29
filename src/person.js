@@ -77,6 +77,13 @@ export function create_person(scene) {
             }
 
             animatePerson();
+             // Activer les ombres pour les meshes de la personne
+             model.traverse((child) => {
+                if (child.isMesh) {
+                    child.castShadow = true; // Le modèle va lancer des ombres
+                    child.receiveShadow = true; // Le modèle va recevoir des ombres
+                }
+            });
         },
         undefined,
         (error) => {
