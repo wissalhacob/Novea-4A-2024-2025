@@ -14,7 +14,6 @@ export function createRoad(scene) {
   // Ajuster la taille de la texture pour qu'elle recouvre toute la largeur sans répétition
   roadTexture.wrapS = THREE.RepeatWrapping;
   roadTexture.wrapT = THREE.RepeatWrapping;
-
   // Pour étirer la texture sur la géométrie sans répétition
   roadTexture.minFilter = THREE.LinearFilter;
   roadTexture.magFilter = THREE.LinearFilter;
