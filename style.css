@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex; /* Place la barre à gauche et la scène à droite */
+  height: 100vh; /* Assure que la hauteur est à 100% de l'écran */
+  overflow: hidden; /* Empêche le scroll si jamais il apparaît */
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 250px; /* Largeur de la barre latérale */
+  height: 100vh; /* Assure une hauteur complète */
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar label {
+  font-size: 16px;
+}
+
+.sidebar select,
+.sidebar button {
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  width: 100%; /* Pour occuper toute la largeur */
+}
+
+.sidebar select {
+  background-color: white;
+  color: black;
+}
+
+.sidebar button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar button:hover {
+  background-color: #0056b3;
+}
+
+#render-target {
+  flex-grow: 1; /* La scène prend tout l’espace restant */
+  height: 100vh;
+  background: #f0f0f0;
+}
