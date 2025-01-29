@@ -5,7 +5,11 @@ import * as dat from 'dat.gui';
 // Function to add lights and controls to the scene
 export function create_lumiere_ui(scene) {
     const gui = new dat.GUI();
-
+    gui.domElement.style.position = 'absolute';
+    gui.domElement.style.top = '0';
+    gui.domElement.style.right = '0';
+    gui.domElement.style.zIndex = 15;  // Assurez-vous que le z-index est bien appliqué
+    document.body.appendChild(gui.domElement);
     // Ambient Light
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
