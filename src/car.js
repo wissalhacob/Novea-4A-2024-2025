@@ -24,7 +24,8 @@ export function create_car(scene) {
             modelGroup = new THREE.Group();
             modelGroup.add(model); // Ajout du modèle dans le groupe
             scene.add(modelGroup); // Ajout du groupe à la scène
-
+            // Initialement, rendre le modèle invisible
+            modelGroup.visible = false;
             // Fonction pour animer la voiture
             function animateCar() {
                 if (animationActive && modelGroup.visible) { // Vérifie si l'animation est active et visible

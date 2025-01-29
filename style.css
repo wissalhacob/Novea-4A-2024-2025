@@ -1,58 +1,92 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Général */
 body {
-  display: flex; /* Place la barre à gauche et la scène à droite */
-  height: 100vh; /* Assure que la hauteur est à 100% de l'écran */
-  overflow: hidden; /* Empêche le scroll si jamais il apparaît */
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f0f0f0;
+  overflow: hidden;
 }
 
+/* Sidebar */
 .sidebar {
-  width: 250px; /* Largeur de la barre latérale */
-  height: 100vh; /* Assure une hauteur complète */
-  background-color: #333;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  align-items: flex-start;
 }
 
-.sidebar label {
+/* Boutons de la sidebar */
+button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   font-size: 16px;
 }
 
-.sidebar select,
-.sidebar button {
-  padding: 10px;
-  font-size: 14px;
+button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Contenu dynamique de la sidebar */
+#sidebarContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+}
+
+select {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: black;
   border: none;
   border-radius: 5px;
-  width: 100%; /* Pour occuper toute la largeur */
 }
-
-.sidebar select {
-  background-color: white;
-  color: black;
-}
-
-.sidebar button {
-  background-color: #007bff;
+input[type="range"],
+input[type="checkbox"] {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
-  cursor: pointer;
-  transition: background 0.3s;
+  border: none;
+  border-radius: 5px;
 }
 
-.sidebar button:hover {
-  background-color: #0056b3;
+/* Appliquer une disposition en ligne pour les éléments à côté des cases à cocher */
+.sidebar div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Espacement entre les éléments */
+  align-items: flex-start;
+}
+
+.sidebar label {
+  margin-right: 10px;
+  align-items: flex-start; /* Espace entre le texte et la case à cocher */
 }
 
 #render-target {
-  flex-grow: 1; /* La scène prend tout l’espace restant */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
-  background: #f0f0f0;
+  z-index: 1;
 }

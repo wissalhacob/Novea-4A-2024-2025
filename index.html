@@ -8,17 +8,28 @@
   </head>
   <body>
     <div class="sidebar">
+      <div>
       <label for="inclinaison">Inclinaison du panneau :</label>
       <select id="inclinaison">
-        <option value="15">15°</option>
+        <option value="15" >15°</option>
         <option value="45">45°</option>
         <option value="60">60°</option>
       </select>
+    </div>
+      <!-- Case à cocher pour afficher/masquer le personnage -->
+      <div>
+        <label for="togglePerson">Personnage</label>
+        <input type="checkbox" id="togglePerson">
+      </div>
 
-      <button id="togglePerson">Afficher/Cacher le personnage</button>
-      <button id="toggleCar">Afficher/Cacher la voiture</button>
+      <!-- Case à cocher pour afficher/masquer la voiture -->
+      <div>
+        <label for="toggleCar">Voiture</label>
+        <input type="checkbox" id="toggleCar">
+      </div>
     </div>
 
+    <!-- Zone de rendu 3D -->
     <div id="render-target"></div>
     
     <script type="module" src="/src/main.js"></script>
