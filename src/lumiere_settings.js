@@ -113,6 +113,7 @@ THREEx.DayNight.Skydom = function () {
 // 🌅 Création du Système Jour/Nuit
 export function create_lumiere_ui(scene, camera) {
     const gui = new dat.GUI();
+<<<<<<< HEAD
     const params = {
         heure: 12,
         autoCycle: false,
@@ -130,6 +131,16 @@ export function create_lumiere_ui(scene, camera) {
     scene.add(sunSphere.object3d);
     scene.add(skyDome.object3d);
     scene.add(starField.object3d);
+=======
+    gui.domElement.style.position = 'absolute';
+    gui.domElement.style.top = '0';
+    gui.domElement.style.right = '0';
+    gui.domElement.style.zIndex = 15;  // Assurez-vous que le z-index est bien appliqué
+    document.body.appendChild(gui.domElement);
+    // Ambient Light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+>>>>>>> upstream/main
 
     function updateLights() {
         const sunAngle = ((params.heure - 6) / 24) * Math.PI * 2;
