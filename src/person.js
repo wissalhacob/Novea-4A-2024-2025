@@ -11,7 +11,7 @@ export function create_person(scene) {
 
     let leftLeg, rightLeg, leftKnee, rightKnee, leftArm, rightArm;
 
-    const modelPath = 'models/source/personne2.glb';
+    const modelPath = '/models/source/personne2.glb';
 
     loader.load(
         modelPath,

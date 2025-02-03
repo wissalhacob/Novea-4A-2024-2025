@@ -5,6 +5,12 @@ body {
   background-color: #f0f0f0;
   overflow: hidden;
 }
+.dg {
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
+  z-index: 9999 !important; /* Assurez-vous qu'il est au-dessus du rendu */
+}
 
 /* Sidebar */
 .sidebar {

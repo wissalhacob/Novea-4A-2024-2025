@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { createScene } from './scene'; 
 import { createRoad } from './rue';
-import { create_lumiere_ui } from './lumiere_settings';
+
 import { create_person} from './person';
 import { create_car } from './car';
 // Fonction principale qui initialise la scène
@@ -10,7 +10,6 @@ function main() {
     const { scene, camera, renderer } = createScene();
     
     createRoad(scene);
-    create_lumiere_ui(scene);
     create_person(scene);
     create_car(scene);
 

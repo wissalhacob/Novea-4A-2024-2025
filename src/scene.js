@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { createSky} from './sky';
 
 export function createScene() {
   const scene = new THREE.Scene();
@@ -13,11 +14,7 @@ export function createScene() {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.getElementById('render-target').appendChild(renderer.domElement);
 
-  // Lumières
-  const light = new THREE.PointLight(0xffffff, 1, 100);
-  light.position.set(15, 20, 15);  // Moved light higher
-  light.castShadow = true;  // Enable shadow casting
-  scene.add(light);
+
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
@@ -45,6 +42,8 @@ export function createScene() {
   camera.position.set(0, 15, 20);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+  // Appel à la fonction createSky pour ajouter le ciel
+  createSky(scene, renderer);
   // Fonction d'animation
   function animate() {
     controls.update();
