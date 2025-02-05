@@ -3,17 +3,14 @@ import * as THREE from 'three';
 import { createScene } from './scene'; 
 import { createRoad } from './rue';
 import { create_lumiere_ui } from './lumiere_settings';
-<<<<<<< HEAD
 import { create_sky_with_clouds } from './sky';
 import { create_person, create_person_coté } from './person';
 import { create_car } from './car';
 
 
 
-=======
 import { create_person} from './person';
 import { create_car } from './car';
->>>>>>> upstream/main
 // Fonction principale qui initialise la scène
 function main() {
     const { scene, camera, renderer } = createScene();
