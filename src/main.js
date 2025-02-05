@@ -2,12 +2,6 @@
 import * as THREE from 'three';
 import { createScene } from './scene'; 
 import { createRoad } from './rue';
-import { create_lumiere_ui } from './lumiere_settings';
-import { create_sky_with_clouds } from './sky';
-import { create_person, create_person_coté } from './person';
-import { create_car } from './car';
-
-
 
 import { create_person} from './person';
 import { create_car } from './car';
@@ -15,8 +9,6 @@ import { create_car } from './car';
 function main() {
     const { scene, camera, renderer } = createScene();
     createRoad(scene);
-    create_lumiere_ui(scene)
-    create_sky_with_clouds(scene); // Ajoute la gestion du Soleil et de la Lune
     create_person(scene);
     create_car(scene);
     document.getElementById("startCycle").addEventListener("click", function () {
