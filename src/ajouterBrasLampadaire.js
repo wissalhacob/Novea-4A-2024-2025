@@ -1,4 +1,9 @@
 import * as THREE from 'three';
+import { RectAreaLight } from 'three';  
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js';
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
+
+
 
 export function ajouterBrasLampadaire(lampadaire, type) {
     const brasGroup = new THREE.Group();
@@ -11,8 +16,10 @@ export function ajouterBrasLampadaire(lampadaire, type) {
 
     let ledMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffaa, 
-        emissive: 0x000000, // Éteint par défaut
-        emissiveIntensity: 1.8
+        emissive:0xffff55, // Rend la LED visible
+        emissiveIntensity: 1.8,
+        metalness: 0.1,
+        roughness: 0.3
     });
 
     let bras, led, support;
@@ -98,17 +105,38 @@ export function ajouterBrasLampadaire(lampadaire, type) {
     }
 
     // **Ajout d'un projecteur jaune pour simuler la lumière du lampadaire**
-    const spotLight = new THREE.SpotLight(0xffff00, 0); // Intensité 0 par défaut
+    /*const spotLight = new THREE.SpotLight(0xffff00, 5); // Intensité 0 par défaut
     spotLight.position.set(2, 3, 0);
-    spotLight.angle = Math.PI / 4;
-    spotLight.penumbra = 0.5;
-    spotLight.decay = 2;
-    spotLight.distance = 15;
+    spotLight.angle = Math.PI / 6;
+    spotLight.penumbra = 0.2;
+    spotLight.decay = 1;
+    spotLight.distance = 20;
     spotLight.castShadow = true;
+
+
+    // Set the target of the SpotLight
+    const spotLightTarget = new THREE.Object3D();
+    spotLightTarget.position.set(2,-4.5, 0); // Point the light at the origin (center of the ground)
+    spotLight.target = spotLightTarget;
 
     brasGroup.add(spotLight);
     const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-    brasGroup.add(spotLightHelper);
+    brasGroup.add(spotLightTarget);
+    brasGroup.add(spotLightHelper);*/
+
+    // Active les uniformes des lumières rectangulaires
+    RectAreaLightUniformsLib.init();
+
+    // Création de la lumière rectangulaire
+    const spotLight = new THREE.RectAreaLight(0xffffaa, 5, 3.5, 0.7); 
+    spotLight.position.set(2, 4, 0);
+    spotLight.lookAt(2, 3, 0);
+
+    // Ajouter un helper pour voir la lumière (facultatif)
+    const rectLightHelper = new RectAreaLightHelper(spotLight);
+
+    spotLight.add(rectLightHelper);
+    brasGroup.add(spotLight);
 
     brasGroup.position.set(0, 0, 0);
     lampadaire.add(brasGroup);

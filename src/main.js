@@ -24,6 +24,7 @@ function main() {
 
     // Fonction d'animation en boucle
     function animate() {
+        spotLight.lookAt(2, 3, 0);
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     }
