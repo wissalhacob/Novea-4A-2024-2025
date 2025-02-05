@@ -107,6 +107,8 @@ export function ajouterBrasLampadaire(lampadaire, type) {
     spotLight.castShadow = true;
 
     brasGroup.add(spotLight);
+    const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+    brasGroup.add(spotLightHelper);
 
     brasGroup.position.set(0, 0, 0);
     lampadaire.add(brasGroup);
