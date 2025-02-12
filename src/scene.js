@@ -4,7 +4,6 @@ import { createSky} from './sky';
 
 export function createScene() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x87ceeb); // Bleu ciel
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer();
@@ -14,19 +13,6 @@ export function createScene() {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.getElementById('render-target').appendChild(renderer.domElement);
 
-
-
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  // Ground plane to receive shadows
-  const geometry = new THREE.PlaneGeometry(100, 100);
-  const material = new THREE.ShadowMaterial({ opacity: 0.5 });
-  const ground = new THREE.Mesh(geometry, material);
-  ground.rotation.x = - Math.PI / 2; // Horizontal
-  ground.position.y = -1; // Slightly below
-  ground.receiveShadow = true;
-  scene.add(ground);
 
   // Initialisation d'OrbitControls
   const controls = new OrbitControls(camera, renderer.domElement);

@@ -1,107 +1,114 @@
 import * as THREE from 'three';
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 
-// Fonction pour créer la lampe avec un modèle GLB et un support
 export function create_lampes(scene, typeBras) {
-    let brasMaterial = new THREE.MeshStandardMaterial({ 
-        color: 0xffffff,  // Blanc par défaut
-        metalness: 0.9, 
+    const loader = new GLTFLoader();
+    let modelGroup = new THREE.Group(); // Groupe pour gérer la lampe
+    const lampGroup = new THREE.Group(); // Groupe principal
+
+    let brasMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.9,
         roughness: 0.3
     });
 
     let ledMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffaa, 
-        emissive: 0x000000, // Éteint par défaut
-        emissiveIntensity: 1.8
+        color: 0xffffaa,
+        emissive: 0x000000,
+        emissiveIntensity: 0
     });
 
-    // Créer un groupe pour la lampe et son support
-    const lampGroup = new THREE.Group();
-
-    let bras, led;
-
-    switch (typeBras) {
-        case "GRIFF S":
-            bras = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.35, 0.8), brasMaterial);
-            bras.scale.set(0.4, 1, 1);
-            bras.rotation.y = -Math.PI / 2;
-            bras.position.set(0, 6.8, -1.7);
-            lampGroup.add(bras);
-
-            led = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.7), ledMaterial);
-            led.position.set(0, 6.6, -1.7);
-            led.rotation.y = -Math.PI / 2;
-            lampGroup.add(led);
-            break;
-
-        case "TEKK S":
-            bras = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.3, 0.75), brasMaterial);
-            bras.scale.set(0.4, 1, 1);
-            bras.rotation.y = -Math.PI / 2;
-            bras.position.set(0, 6.8, -1.7);
-            bras.rotation.z = -0.05;
-            lampGroup.add(bras);
-
-            led = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.7), ledMaterial);
-            led.position.set(0, 6.6, -1.7);
-            led.rotation.y = -Math.PI / 2;
-            lampGroup.add(led);
-            break;
-
-        case "ATINA SLIM 6480":
-            bras = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.25, 0.7), brasMaterial);
-            bras.rotation.y = -Math.PI / 2;
-            bras.position.set(0, 6.8, -1.7);
-            bras.rotation.z = -0.1;
-            lampGroup.add(bras);
-
-            led = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.7), ledMaterial);
-            led.position.set(0, 6.6, -1.7);
-            led.rotation.y = -Math.PI / 2;
-            lampGroup.add(led);
-            break;
-
-        default:
-            console.warn("Type de lampe inconnu:", typeBras);
-            return null;
-    }
-
-    // Création du support de la lampe
+    let led;
     const supportGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.3, 7);
     const supportMaterial = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
     const support = new THREE.Mesh(supportGeometry, supportMaterial);
     support.position.set(0, 6.5, -0.6);
-    support.rotation.x = -Math.PI / 3;  
-    support.rotation.y = Math.PI / 9; 
+    support.rotation.x = -Math.PI / 3;
+    support.rotation.y = Math.PI / 9;
     support.castShadow = true;
-    lampGroup.add(support);
 
-    // Ajout d'un projecteur jaune
-    const spotLight = new THREE.SpotLight(0xffff00, 0); // Intensité 0 par défaut
-    spotLight.position.set(2, 3, 0);
-    spotLight.angle = Math.PI / 4;
-    spotLight.penumbra = 0.5;
-    spotLight.decay = 2;
-    spotLight.distance = 15;
-    spotLight.castShadow = true;
+    // Fonction de chargement des modèles GLTF
+    function loadModel(modelPath) {
+        loader.load(modelPath, (gltf) => {
+            const model = gltf.scene;
+            model.position.set(-2, 0, 25);
+            model.scale.set(2, 2, 2);
+            modelGroup.add(model);
+            scene.add(modelGroup);
+        });
+    }
+
+    // Chargement selon le type de bras
+    switch (typeBras) {
+        case "GRIFF S":
+            loadModel('models/source/teskk-s.glb');
+            break;
+
+        case "TEKK S":
+            loadModel('models/source/tekk-s.glb');
+            break;
+
+        case "ATINA SLIM 6480":
+            loadModel('models/source/tekk-s.glb');
+            break;
+
+        default:
+            return null;
+    }
+
+    
+
+    // Création de la lumière rectangulaire
+    const spotLight = new THREE.RectAreaLight(0xffffaa, 0, 3.5, 0.7);
+    spotLight.position.set(2, 4, 0);
+    spotLight.lookAt(2, 3, 0);
     lampGroup.add(spotLight);
 
+    // Ajout du support et du groupe principal à la scène
+    lampGroup.add(support);
     lampGroup.position.set(0, 0, 0);
+    scene.add(lampGroup);
 
-    // Fonction d'update pour contrôler la lumière
-    lampGroup.update = function(heure, densiteLumiere) {
-        let ledActive = heure >= 20;
+    RectAreaLightUniformsLib.init();
+
+    // Mise à jour de l'intensité de la lumière
+    lampGroup.update = function(densiteLumiere) {
+        let ledActive = densiteLumiere < 1;
+        let intensityFactor = Math.max(0, (0.5 - densiteLumiere) * 2);
+
+        let targetIntensity = Math.max(0.1, intensityFactor);
+        const maxIntensity = 2.0;
+        let ledIntensity = Math.lerp(ledMaterial.emissiveIntensity, targetIntensity, 0.1);
+        ledIntensity = Math.min(ledIntensity, maxIntensity);
+
         if (ledActive) {
-            ledMaterial.emissive.set(0xffff55);
-            brasMaterial.color.set(0xffffaa);
-            spotLight.intensity = densiteLumiere;
+            updateMaterialsForActiveLED(ledIntensity);
         } else {
-            ledMaterial.emissive.set(0x000000);
-            brasMaterial.color.set(0xffffff);
-            spotLight.intensity = 0;
+            updateMaterialsForInactiveLED();
         }
     };
 
-    scene.add(lampGroup);
+    // Helper function for updating materials when LED is active
+    function updateMaterialsForActiveLED(ledIntensity) {
+        ledMaterial.emissive.set(0xffff55); 
+        ledMaterial.emissiveIntensity = ledIntensity * 1.8;
+        brasMaterial.color.set(0xffffaa);
+        spotLight.intensity = ledIntensity * 5;
+    }
+
+    // Helper function for updating materials when LED is inactive
+    function updateMaterialsForInactiveLED() {
+        ledMaterial.emissive.set(0x000000);
+        ledMaterial.emissiveIntensity = 0;
+        brasMaterial.color.set(0xffffff);
+        spotLight.intensity = 0;
+    }
+
+    // Ajout de la méthode lerp si elle n'existe pas dans votre environnement
+    Math.lerp = function(start, end, t) {
+        return start + (end - start) * t;
+    };
 
     return { lampe: lampGroup };
 }
