@@ -4,7 +4,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export function create_lampes(scene, typeBras) {
     const loader = new GLTFLoader();
-    let modelGroup = new THREE.Group(); // Groupe pour gérer la lampe
     const lampGroup = new THREE.Group(); // Groupe principal
 
     let brasMaterial = new THREE.MeshStandardMaterial({
@@ -27,35 +26,53 @@ export function create_lampes(scene, typeBras) {
     support.rotation.x = -Math.PI / 3;
     support.rotation.y = Math.PI / 9;
     support.castShadow = true;
-
-    // Fonction de chargement des modèles GLTF
+    let bras;
+    // Charger le modèle GLTF (lampe)
     function loadModel(modelPath) {
+        console.log(modelPath)
         loader.load(modelPath, (gltf) => {
-            const model = gltf.scene;
-            model.position.set(-2, 0, 25);
-            model.scale.set(2, 2, 2);
-            modelGroup.add(model);
-            scene.add(modelGroup);
-        });
-    }
+            if (bras) {
+                lampGroup.remove(bras); // Supprimer l'ancien modèle
+            }
+            bras = gltf.scene; // Charger le modèle 3D
+            bras.scale.set(100, 200, 170); // Ajuster l'échelle du modèle
 
-    // Chargement selon le type de bras
+            // Appliquer la couleur gris clair au modèle 3D
+            bras.traverse((child) => {
+                if (child.isMesh) {
+                    child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                    child.castShadow = true; // Activer les ombres
+                }
+            });
+
+            // Corriger l'orientation du modèle pour qu'il soit sur sa base
+            bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+            bras.rotation.z= -Math.PI / 2;
+            // Positionner la lampe sur le support
+            bras.position.set(-0.5, 6.8, -1.3); // Ajuster cette position si nécessaire
+
+            lampGroup.add(bras); // Ajouter la lampe au groupe
+        },
+    );
+}
+    let brasPath = null;
+
     switch (typeBras) {
-        case "GRIFF S":
-            loadModel('models/source/teskk-s.glb');
+        case "GRIFF":
+            
+        case "TEKK":
+            brasPath = "./models/source/tekk-s.glb";
+            loadModel(brasPath);
             break;
-
-        case "TEKK S":
-            loadModel('models/source/tekk-s.glb');
+        case "ATINA":
+            brasPath = "./models/source/attina.glb";
+            loadModel(brasPath);
             break;
-
-        case "ATINA SLIM 6480":
-            loadModel('models/source/tekk-s.glb');
-            break;
-
         default:
             return null;
     }
+
+
 
     
 
