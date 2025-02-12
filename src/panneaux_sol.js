@@ -6,7 +6,7 @@ export function create_panneaux_sol(scene) {
     
       // Création du panneau solaire
       const solarPanelGeometry = new THREE.BoxGeometry(2.5, 0.15, 3);
-      const solarPanelTexture = textureLoader.load('/models/source/solar_panel_texture.jpg'); // Charger la texture du panneau solaire
+      const solarPanelTexture = textureLoader.load('/models/texture/solar_panel_texture.jpg'); // Charger la texture du panneau solaire
 
       // Ajuster la répétition de la texture du panneau solaire
       solarPanelTexture.wrapS = solarPanelTexture.wrapT = THREE.RepeatWrapping; // Assurer la répétition de la texture
