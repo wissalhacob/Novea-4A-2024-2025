@@ -59,7 +59,7 @@ export function create_lampes(scene, typeBras) {
 
     switch (typeBras) {
         case "GRIFF":
-            
+            break;
         case "TEKK":
             brasPath = "./models/source/tekk-s.glb";
             loadModel(brasPath);
