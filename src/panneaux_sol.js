@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 // Fonction pour créer le panneau solaire et son inclinaison
-export function create_panneaux_sol(scene) {
+export function create_panneaux_sol(scene,longueur) {
       const textureLoader = new THREE.TextureLoader();
     
       // Création du panneau solaire
@@ -19,7 +19,24 @@ export function create_panneaux_sol(scene) {
 
       // Créer le panneau solaire
       const solarPanel = new THREE.Mesh(solarPanelGeometry, solarPanelMaterial);
-      solarPanel.position.set(0, 8, 0);  // Positionner le panneau solaire
+      
+      switch (longueur) {
+        case "4":
+            solarPanel.position.set(0, 10, 0); 
+            break;
+        case "6":
+            solarPanel.position.set(0, 12, 0); 
+            break;
+        case "7":
+          solarPanel.position.set(0, 12.8, 0); 
+            break;
+        case "8":
+          solarPanel.position.set(0, 14, 0); 
+            break;
+        default:
+          solarPanel.position.set(0, 15, 0); 
+            break;
+    }
       solarPanel.rotation.x = -Math.PI / 6;  // Incliner le panneau solaire
       solarPanel.castShadow = true;  // Activer l'ombrage
 

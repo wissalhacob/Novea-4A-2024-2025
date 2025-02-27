@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 
-export function create_lampes(scene, typeBras) {
+export function create_lampes(scene, typeBras ,longueur) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); // Groupe principal
 
@@ -22,7 +22,24 @@ export function create_lampes(scene, typeBras) {
     const supportGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.3, 7);
     const supportMaterial = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
     const support = new THREE.Mesh(supportGeometry, supportMaterial);
-    support.position.set(0, 6.5, -0.6);
+    switch (longueur) {
+        case "4":
+            support.position.set(0,8.5, -0.6);
+            break;
+        case "6":
+            support.position.set(0,10.5, -0.6);
+            break;
+        case "7":
+            support.position.set(0,11.5, -0.6);
+            break;
+        case "8":
+            support.position.set(0,12.5, -0.6);
+            break;
+        default:
+            support.position.set(0,8.5, -0.6);
+            break;
+    }
+    
     support.rotation.x = -Math.PI / 3;
     support.rotation.y = Math.PI / 9;
     support.castShadow = true;
@@ -50,14 +67,31 @@ export function create_lampes(scene, typeBras) {
     
                 // Corriger l'orientation du modèle pour qu'il soit sur sa base
                 bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
-                bras.rotation.z= -Math.PI / 2;
+                bras.rotation.z = -Math.PI / 2;
+    
                 // Positionner la lampe sur le support
-                bras.position.set(-0.3, 6.2, -1); // Ajuster cette position si nécessaire
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.3, 8.2, -1);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 10.2, -1);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 11.2, -1);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 12.2, -1);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 8.2, -1);
+                        break;
+                }
     
                 lampGroup.add(bras); // Ajouter la lampe au groupe
-            },
-        );
+            }); // <- Closing the load() method correctly here.
             break;
+        
 
         case "GRIFF_XL":
             modelPath = "./models/source/griff.glb";
@@ -80,8 +114,25 @@ export function create_lampes(scene, typeBras) {
                 bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
                 bras.rotation.z= -Math.PI / 2;
                 // Positionner la lampe sur le support
-                bras.position.set(-0.3, 6.4, -0.9); // Ajuster cette position si nécessaire
-    
+                
+                    // Positionner la lampe sur le support
+                    switch (longueur) {
+                        case "4":
+                            bras.position.set(-0.3, 8.4, -0.9); 
+                            break;
+                        case "6":
+                            bras.position.set(-0.3, 10.4, -1);
+                            break;
+                        case "7":
+                            bras.position.set(-0.3, 11.4, -1);
+                            break;
+                        case "8":
+                            bras.position.set(-0.3, 12.4, -1);
+                            break;
+                        default:
+                            bras.position.set(-0.3, 8.4, -1);
+                            break;
+                    }
                 lampGroup.add(bras); // Ajouter la lampe au groupe
             },
         );
@@ -106,9 +157,24 @@ export function create_lampes(scene, typeBras) {
                 // Corriger l'orientation du modèle pour qu'il soit sur sa base
                 bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
                 bras.rotation.z= -Math.PI / 2;
-                // Positionner la lampe sur le support
-                bras.position.set(-0.3, 7, -1.8); // Ajuster cette position si nécessaire
-    
+
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.3, 9, -1.8);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 11, -1.8);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 12, -1.8);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 13, -1.8);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 9, -1.8);
+                        break;
+                }
                 lampGroup.add(bras); // Ajouter la lampe au groupe
             },
         );
@@ -133,9 +199,25 @@ export function create_lampes(scene, typeBras) {
                 // Corriger l'orientation du modèle pour qu'il soit sur sa base
                 bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
                 bras.rotation.z= -Math.PI / 2;
-                // Positionner la lampe sur le support
-                bras.position.set(-0.3, 6.9, -1.8); // Ajuster cette position si nécessaire
+
     
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.3, 8.9, -1.8);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 10.9, -1.8);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 11.9, -1.8);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 12.9, -1.8);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 8.9, -1.8);
+                        break;
+                }
                 lampGroup.add(bras); // Ajouter la lampe au groupe
             },
         );
@@ -160,9 +242,23 @@ export function create_lampes(scene, typeBras) {
                 // Corriger l'orientation du modèle pour qu'il soit sur sa base
                 bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
                 bras.rotation.z= -Math.PI / 2;
-                // Positionner la lampe sur le support
-                bras.position.set(-0.5, 6.5, -1.3); // Ajuster cette position si nécessaire
-    
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.5, 8.5, -1.3);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 10.5, -1.8);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 11.5, -1.8);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 12.5, -1.8);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 8.5, -1.8);
+                        break;
+                }
                 lampGroup.add(bras); // Ajouter la lampe au groupe
             },
         );
