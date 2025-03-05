@@ -1,9 +1,11 @@
-import * as THREE from 'three'; // Importation de toutes les fonctionnalités nécessaires de Three.js
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'; // Ajout de l'importation
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { createSky} from './sky';
 
 export function createScene() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x87ceeb); // Bleu ciel
+
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -12,13 +14,19 @@ export function createScene() {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.getElementById('render-target').appendChild(renderer.domElement);
 
-  // Lumières comme avant
-  const light = new THREE.PointLight(0xffffff, 1, 100);
-  light.position.set(10, 10, 10);
-  scene.add(light);
-  
+
+
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
+
+  // Ground plane to receive shadows
+  const geometry = new THREE.PlaneGeometry(100, 100);
+  const material = new THREE.ShadowMaterial({ opacity: 0.5 });
+  const ground = new THREE.Mesh(geometry, material);
+  ground.rotation.x = - Math.PI / 2; // Horizontal
+  ground.position.y = -1; // Slightly below
+  ground.receiveShadow = true;
+  scene.add(ground);
 
   // Initialisation d'OrbitControls
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -34,11 +42,13 @@ export function createScene() {
   camera.position.set(0, 15, 20);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-  // Fonction d'animation avec mise à jour des contrôles
+  // Appel à la fonction createSky pour ajouter le ciel
+  createSky(scene, renderer);
+  // Fonction d'animation
   function animate() {
-    controls.update(); // Mise à jour des contrôles (cela est nécessaire pour l'amortissement et les mouvements)
-    renderer.render(scene, camera); // Rendu de la scène
-    requestAnimationFrame(animate); // Boucle d'animation
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
   }
 
   window.addEventListener('resize', () => {
@@ -47,7 +57,7 @@ export function createScene() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  animate(); // Démarre l'animation
+  animate();
 
   return { scene, camera, renderer };
 }
