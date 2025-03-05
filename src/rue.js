@@ -103,7 +103,8 @@ export function createRoad(scene) {
 function updateLamp() {
     const selectedLampType = document.getElementById('lampType').value;
     const selectedLongueur = document.getElementById('Longueur').value;
-
+    const selectedtypeLampe = document.getElementById('typeLampe').value;
+    const selectedformeLumiere = document.getElementById('formeLumiere').value;
     lampPosts.forEach(post => {
         // Supprimer l'ancienne lampe et le panneau solaire du groupe et de la scène
         post.group.remove(post.lampe);
@@ -112,7 +113,7 @@ function updateLamp() {
         scene.remove(post.solarPanel);
 
         // Créer une nouvelle lampe et un nouveau panneau solaire
-        const newLampGroup = create_lampes(scene, selectedLampType, selectedLongueur);
+        const newLampGroup = create_lampes(scene, selectedLampType, selectedLongueur,selectedtypeLampe);
         const newSolarPanel = create_panneaux_sol(scene, selectedLongueur);
         const { solarPanel } = newSolarPanel;
         const { lampe } = newLampGroup;
@@ -134,6 +135,7 @@ function updateLamp() {
    // Écouteur d'événement pour changer le type de lampe et la longueur
    document.getElementById('lampType').addEventListener('change', updateLamp);
    document.getElementById('Longueur').addEventListener('change', updateLamp);
+   
     const lampsLeft = [];
     const lampsRight = [];
 
