@@ -116,4 +116,9 @@ export function createRoad(scene) {
 
   animateCycle();
   updateLampPostLights(params.heure, params.densiteLumiere);
+  return lampPosts;
 }
+
+
+
+

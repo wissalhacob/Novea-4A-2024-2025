@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import { RectAreaLight } from 'three';  
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
+import { ajouterDetecteurPresence } from './detecteur.js';
 
 
-
-export function ajouterBrasLampadaire(lampadaire, type) {
+export function ajouterBrasLampadaire(lampadaire, type, getSunAngle) {
     const brasGroup = new THREE.Group();
 
     let brasMaterial = new THREE.MeshStandardMaterial({ 
@@ -137,9 +137,7 @@ export function ajouterBrasLampadaire(lampadaire, type) {
 
     spotLight.add(rectLightHelper);
     brasGroup.add(spotLight);
-
     brasGroup.position.set(0, 0, 0);
-    lampadaire.add(brasGroup);
 
     // Ajoute une fonction d'update pour changer la couleur et la densité lumineuse
     brasGroup.update = function(heure, densiteLumiere) {
@@ -156,5 +154,10 @@ export function ajouterBrasLampadaire(lampadaire, type) {
         }
     };
 
+    ajouterDetecteurPresence(brasGroup, spotLight, ledMaterial, brasMaterial, getSunAngle);
+    lampadaire.add(brasGroup);
     return brasGroup;
 }
+
+
+  

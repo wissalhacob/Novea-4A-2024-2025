@@ -151,3 +151,5 @@ export function create_lumiere_ui(scene, camera) {
     updateLights();
     animateCycle();
 }
+export { THREEx };
+

@@ -6,13 +6,13 @@ import { create_lumiere_ui } from './lumiere_settings';
 import { create_sky_with_clouds } from './sky';
 import { create_person, create_person_coté } from './person';
 import { create_car } from './car';
-
+import { ajouterDetecteurPresence } from './detecteur';
 
 
 // Fonction principale qui initialise la scène
 function main() {
     const { scene, camera, renderer } = createScene();
-    createRoad(scene);
+    const brasGroup = createRoad(scene);
     create_lumiere_ui(scene)
     create_sky_with_clouds(scene); // Ajoute la gestion du Soleil et de la Lune
     create_person(scene);
@@ -29,6 +29,18 @@ function main() {
         requestAnimationFrame(animate);
     }
 
+    // Supposons que chaque lampadaire dans le brasGroup est un lampadaire individuel
+    brasGroup.forEach(lampadaire => {
+    // Récupère les objets liés au lampadaire, comme la lumière (rectLight), le matériau de la LED, etc.
+    const spotLight = lampadaire.getObjectByName('spotLight');  // Exemple d'accès à la lumière
+    const ledMaterial = lampadaire.getObjectByName('ledMaterial');  // Exemple d'accès au matériau LED
+    const brasMaterial = lampadaire.getObjectByName('brasMaterial');  // Matériau du bras
+    const heure = params.heure; // Récupère l'heure à partir de l'interface GUI
+
+    // Initialiser le détecteur de présence pour ce lampadaire
+    ajouterDetecteurPresence(lampadaire, spotLight, ledMaterial, brasMaterial, getSunAngle, heure);
+});
+
     // Gestion du redimensionnement de la fenêtre
     window.addEventListener("resize", () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -41,6 +53,11 @@ function main() {
             if (params.heure >= 24) params.heure = 0;
             updateLights();
             updateLampPostLights(((params.heure - 6) / 24) * Math.PI * 2, params.heure);
+
+            // Mettre à jour les détecteurs de présence
+            brasGroup.forEach(lampadaire => {
+                lampadaire.update();  // Appeler la méthode de mise à jour de chaque lampadaire
+        });
         }
         requestAnimationFrame(animateCycle);
     }
