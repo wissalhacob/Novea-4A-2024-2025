@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 
-export function create_lampes(scene, typeBras, longueur, formeLumiere) {
+export function create_lampes(scene, typeBras ,longueur) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); // Groupe principal
 
@@ -22,22 +22,22 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const supportGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.3, 7);
     const supportMaterial = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
     const support = new THREE.Mesh(supportGeometry, supportMaterial);
-
+    
     switch (longueur) {
         case "4":
-            support.position.set(0, 8.5, -0.6);
+            support.position.set(0,8.5, -0.6);
             break;
         case "6":
-            support.position.set(0, 10.5, -0.6);
+            support.position.set(0,10.5, -0.6);
             break;
         case "7":
-            support.position.set(0, 11.5, -0.6);
+            support.position.set(0,11.5, -0.6);
             break;
         case "8":
-            support.position.set(0, 12.5, -0.6);
+            support.position.set(0,12.5, -0.6);
             break;
         default:
-            support.position.set(0, 8.5, -0.6);
+            support.position.set(0,8.5, -0.6);
             break;
     }
 
@@ -46,157 +46,252 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     support.castShadow = true;
     
     let bras;
+
     let modelPath = null;
 
+    // ✅ **Ton switch (typeBras) conservé tel quel**
     switch (typeBras) {
         case "GRIFF_S":
             modelPath = "./models/source/griff.glb";
+            loader.load(modelPath, (gltf) => {
+                if (bras) {
+                    lampGroup.remove(bras); // Supprimer l'ancien modèle
+                }
+                bras = gltf.scene; // Charger le modèle 3D
+                bras.scale.set(70, 100, 70); // Ajuster l'échelle du modèle
+    
+                // Appliquer la couleur gris clair au modèle 3D
+                bras.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                        child.castShadow = true; // Activer les ombres
+                    }
+                });
+
+                // Corriger l'orientation du modèle pour qu'il soit sur sa base
+                bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+                bras.rotation.z = -Math.PI / 2;
+
+                // Positionner la lampe sur le support
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.3, 8.2, -1);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 10.2, -1);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 11.2, -1);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 12.2, -1);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 8.2, -1);
+                        break;
+                }
+
+                lampGroup.add(bras); // Ajouter la lampe au groupe
+            }); // <- Closing the load() method correctly here.
             break;
-        case "GRIFF_XL":
-            modelPath = "./models/source/griff.glb";
-            break;
-        case "TEKK_S":
-            modelPath = "./models/source/tekk-s.glb";
-            break;
-        case "TEKK_M":
-            modelPath = "./models/source/tekk-s.glb";
-            break;
+        
+
+            case "GRIFF_XL":
+                modelPath = "./models/source/griff.glb";
+                loader.load(modelPath, (gltf) => {
+                    if (bras) {
+                        lampGroup.remove(bras); // Supprimer l'ancien modèle
+                    }
+                    bras = gltf.scene; // Charger le modèle 3D
+                    bras.scale.set(80, 100, 50); // Ajuster l'échelle du modèle
+        
+                    // Appliquer la couleur gris clair au modèle 3D
+                    bras.traverse((child) => {
+                        if (child.isMesh) {
+                            child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                            child.castShadow = true; // Activer les ombres
+                        }
+                    });
+        
+                    // Corriger l'orientation du modèle pour qu'il soit sur sa base
+                    bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+                    bras.rotation.z= -Math.PI / 2;
+                    // Positionner la lampe sur le support
+                    
+                        // Positionner la lampe sur le support
+                        switch (longueur) {
+                            case "4":
+                                bras.position.set(-0.3, 8.4, -0.9); 
+                                break;
+                            case "6":
+                                bras.position.set(-0.3, 10.4, -1);
+                                break;
+                            case "7":
+                                bras.position.set(-0.3, 11.4, -1);
+                                break;
+                            case "8":
+                                bras.position.set(-0.3, 12.4, -1);
+                                break;
+                            default:
+                                bras.position.set(-0.3, 8.4, -1);
+                                break;
+                        }
+                    lampGroup.add(bras); // Ajouter la lampe au groupe
+                },
+            );
+                break;
+                case "TEKK_S":
+                    modelPath = "./models/source/tekk-s.glb";
+                    loader.load(modelPath, (gltf) => {
+                        if (bras) {
+                            lampGroup.remove(bras); // Supprimer l'ancien modèle
+                        }
+                        bras = gltf.scene; // Charger le modèle 3D
+                        bras.scale.set(70, 200, 170); // Ajuster l'échelle du modèle
+            
+                        // Appliquer la couleur gris clair au modèle 3D
+                        bras.traverse((child) => {
+                            if (child.isMesh) {
+                                child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                                child.castShadow = true; // Activer les ombres
+                            }
+                        });
+            
+                        // Corriger l'orientation du modèle pour qu'il soit sur sa base
+                        bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+                        bras.rotation.z= -Math.PI / 2;
+        
+                        switch (longueur) {
+                            case "4":
+                                bras.position.set(-0.3, 9, -1.8);
+                                break;
+                            case "6":
+                                bras.position.set(-0.3, 11, -1.8);
+                                break;
+                            case "7":
+                                bras.position.set(-0.3, 12, -1.8);
+                                break;
+                            case "8":
+                                bras.position.set(-0.3, 13, -1.8);
+                                break;
+                            default:
+                                bras.position.set(-0.3, 9, -1.8);
+                                break;
+                        }
+                        lampGroup.add(bras); // Ajouter la lampe au groupe
+                    },
+                );
+                    break;
+                    case "TEKK_M":
+                        modelPath = "./models/source/tekk-s.glb";
+                        loader.load(modelPath, (gltf) => {
+                            if (bras) {
+                                lampGroup.remove(bras); // Supprimer l'ancien modèle
+                            }
+                            bras = gltf.scene; // Charger le modèle 3D
+                            bras.scale.set(90, 200, 140); // Ajuster l'échelle du modèle
+                
+                            // Appliquer la couleur gris clair au modèle 3D
+                            bras.traverse((child) => {
+                                if (child.isMesh) {
+                                    child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                                    child.castShadow = true; // Activer les ombres
+                                }
+                            });
+                
+                            // Corriger l'orientation du modèle pour qu'il soit sur sa base
+                            bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+                            bras.rotation.z= -Math.PI / 2;
+            
+                
+                            switch (longueur) {
+                                case "4":
+                                    bras.position.set(-0.3, 8.9, -1.8);
+                                    break;
+                                case "6":
+                                    bras.position.set(-0.3, 10.9, -1.8);
+                                    break;
+                                case "7":
+                                    bras.position.set(-0.3, 11.9, -1.8);
+                                    break;
+                                case "8":
+                                    bras.position.set(-0.3, 12.9, -1.8);
+                                    break;
+                                default:
+                                    bras.position.set(-0.3, 8.9, -1.8);
+                                    break;
+                            }
+                            lampGroup.add(bras); // Ajouter la lampe au groupe
+                        },
+                    );
+                        break;
         case "ATINA":
             modelPath = "./models/source/attina.glb";
+            loader.load(modelPath, (gltf) => {
+                if (bras) {
+                    lampGroup.remove(bras); // Supprimer l'ancien modèle
+                }
+                bras = gltf.scene; // Charger le modèle 3D
+                bras.scale.set(40, 50, 50); // Ajuster l'échelle du modèle
+    
+                // Appliquer la couleur gris clair au modèle 3D
+                bras.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Gris clair
+                        child.castShadow = true; // Activer les ombres
+                    }
+                });
+
+                // Corriger l'orientation du modèle pour qu'il soit sur sa base
+                bras.rotation.x = Math.PI / 2; // Rotation pour l'aligner correctement
+                bras.rotation.z= -Math.PI / 2;
+                switch (longueur) {
+                    case "4":
+                        bras.position.set(-0.5, 8.5, -1.3);
+                        break;
+                    case "6":
+                        bras.position.set(-0.3, 10.5, -1.8);
+                        break;
+                    case "7":
+                        bras.position.set(-0.3, 11.5, -1.8);
+                        break;
+                    case "8":
+                        bras.position.set(-0.3, 12.5, -1.8);
+                        break;
+                    default:
+                        bras.position.set(-0.3, 8.5, -1.8);
+                        break;
+                }
+                lampGroup.add(bras); // Ajouter la lampe au groupe
+            },
+        );
             break;
+
         default:
+            
             return null;
     }
 
-    loader.load(modelPath, (gltf) => {
-        if (bras) {
-            lampGroup.remove(bras);
-        }
-        bras = gltf.scene;
-        bras.scale.set(70, 100, 70);
 
-        bras.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
-                child.castShadow = true;
-            }
-        });
 
-        bras.rotation.x = Math.PI / 2;
-        bras.rotation.z = -Math.PI / 2;
-
-        switch (longueur) {
-            case "4":
-                bras.position.set(-0.3, 8.2, -1);
-                break;
-            case "6":
-                bras.position.set(-0.3, 10.2, -1);
-                break;
-            case "7":
-                bras.position.set(-0.3, 11.2, -1);
-                break;
-            case "8":
-                bras.position.set(-0.3, 12.2, -1);
-                break;
-            default:
-                bras.position.set(-0.3, 8.2, -1);
-                break;
-        }
-
-        lampGroup.add(bras);
-    });
-
-    // **Création des lumières selon la forme sélectionnée**
-    const rectLight = new THREE.RectAreaLight(0xffffaa, 10, 3, 1);
-    const spotLight = new THREE.SpotLight(0xffffaa, 8, 10, Math.PI / 4, 0.5, 2);
-
-    updateLightPosition(rectLight, spotLight, formeLumiere);
-    
-    lampGroup.add(rectLight);
-    lampGroup.add(spotLight);
-    lampGroup.add(support);
-    lampGroup.position.set(0, 0, 0);
-    scene.add(lampGroup);
-
-    RectAreaLightUniformsLib.init();
-
-    function updateLightPosition(rectLight, spotLight, formeLumiere) {
-        if (!rectLight || !spotLight) return;
-
-        switch (formeLumiere) {
-            case "Devant":
-                rectLight.position.set(0, 6, -3);
-                rectLight.width = 2;
-                rectLight.height = 10;
-                rectLight.lookAt(0, 3, -4);
-
-                spotLight.position.set(0, 6, -3);
-                spotLight.angle = Math.PI / 5;
-                spotLight.target.position.set(0, 2, -4);
-                break;
-
-            case "Excentré":
-                rectLight.position.set(0, 6, -3);
-                rectLight.width = 2;
-                rectLight.height = 6;
-                rectLight.lookAt(0, 3, -4);
-
-                spotLight.position.set(0, 6, -3);
-                spotLight.angle = Math.PI / 5;
-                spotLight.target.position.set(0, 2, -4);
-                break;
-                case "Côté":
-                    // Lumière côté gauche
-                    rectLight.position.set(-2, 5, -2);
-                    rectLight.width = 3;
-                    rectLight.height = 3;
-                    rectLight.lookAt(-3, 3, -3);
-    
-                    spotLight.position.set(-2, 6, -2);
-                    spotLight.angle = Math.PI / 4;
-                    spotLight.target.position.set(-3, 3, -3);
-    
-                    // Lumière côté droit
-                    const rectLightRight = new THREE.RectAreaLight(0xffffaa, 10, 3, 3);
-                    rectLightRight.position.set(2, 5, -2);  
-                    rectLightRight.lookAt(3, 3, -3);       
-    
-                    const spotLightRight = new THREE.SpotLight(0xffffaa, 10, 10, Math.PI / 4, 0.5, 2);
-                    spotLightRight.position.set(2, 6, -2);
-                    spotLightRight.target.position.set(3, 3, -3);
-    
-                    lampGroup.add(rectLightRight);
-                    lampGroup.add(spotLightRight);
-                    break;
     
 
-            case "Centré":
-                rectLight.position.set(0, 5, 0);
-                rectLight.width = 4;
-                rectLight.height = 4;
-                rectLight.lookAt(0, 3, 0);
+    // Création de la lumière rectangulaire
+    const spotLight = new THREE.RectAreaLight(0xffffaa, 0, 3.5, 0.7);
+    spotLight.position.set(2, 4, 0);
+    spotLight.lookAt(2, 3, 0);
+lampGroup.add(spotLight);
 
-                spotLight.position.set(0, 6, 0);
-                spotLight.angle = Math.PI / 3;
-                spotLight.target.position.set(0, 3, 0);
-                break;
+    // Ajout du support et du groupe principal à la scène
+lampGroup.add(support);
+lampGroup.position.set(0, 0, 0);
+scene.add(lampGroup);
 
-            default:
-                rectLight.position.set(0, 6, -3);
-                rectLight.width = 2;
-                rectLight.height = 6;
-                rectLight.lookAt(0, 3, -4);
-                
-                spotLight.position.set(0, 6, -3);
-                spotLight.angle = Math.PI / 5;
-                spotLight.target.position.set(0, 2, -4);
-                break;
-        }
+RectAreaLightUniformsLib.init();
 
-        spotLight.target.updateMatrixWorld();
-    }
-
+    // Mise à jour de l'intensité de la lumière
     lampGroup.update = function(densiteLumiere) {
+        let ledActive = densiteLumiere < 1;
         let intensityFactor = Math.max(0, (0.5 - densiteLumiere) * 2);
 
         let targetIntensity = Math.max(0.1, intensityFactor);
@@ -204,13 +299,33 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         let ledIntensity = Math.lerp(ledMaterial.emissiveIntensity, targetIntensity, 0.1);
         ledIntensity = Math.min(ledIntensity, maxIntensity);
 
-        rectLight.intensity = ledIntensity * 8;
-        spotLight.intensity = ledIntensity * 5;
+        if (ledActive) {
+            updateMaterialsForActiveLED(ledIntensity);
+        } else {
+            updateMaterialsForInactiveLED();
+        }
     };
 
+    // Helper function for updating materials when LED is active
+    function updateMaterialsForActiveLED(ledIntensity) {
+        ledMaterial.emissive.set(0xffff55); 
+        ledMaterial.emissiveIntensity = ledIntensity * 1.8;
+        brasMaterial.color.set(0xffffaa);
+        spotLight.intensity = ledIntensity * 5;
+    }
+
+    // Helper function for updating materials when LED is inactive
+    function updateMaterialsForInactiveLED() {
+        ledMaterial.emissive.set(0x000000);
+        ledMaterial.emissiveIntensity = 0;
+        brasMaterial.color.set(0xffffff);
+        spotLight.intensity = 0;
+    }
+
+    // Ajout de la méthode lerp si elle n'existe pas dans votre environnement
     Math.lerp = function(start, end, t) {
         return start + (end - start) * t;
     };
 
-    return { lampe: lampGroup };
+return { lampe: lampGroup };
 }
