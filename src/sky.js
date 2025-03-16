@@ -6,7 +6,6 @@ export function createSky(scene, renderer) {
   let sky = new Sky();
   sky.scale.setScalar(4000);
   scene.add(sky);
-
   const { lampsLeft, lampsRight } = createRoad(scene);
 
   let sun = new THREE.Vector3();
@@ -18,69 +17,65 @@ export function createSky(scene, renderer) {
   sunLight.position.set(0, 100, 0);
   scene.add(sunLight);
 
-  // ☀️ Ajout d'un soleil visible
-  let sunMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(10, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0xffcc00, emissive: 0xffaa00 })
-  );
-  scene.add(sunMesh);
+  // 🌌 **Création des étoiles**
+  const starsGeometry = new THREE.BufferGeometry();
+  const starsVertices = [];
+  for (let i = 0; i < 1000; i++) {
+    const x = (Math.random() - 0.5) * 2000;
+    const y = (Math.random() - 0.5) * 2000;
+    const z = (Math.random() - 0.5) * 2000;
+    starsVertices.push(x, y, z);
+  }
+  starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+  const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1 });
+  const stars = new THREE.Points(starsGeometry, starsMaterial);
+  stars.visible = false;
+  scene.add(stars);
 
   let effectController = {
-    turbidity: 0.8,
-    rayleigh: 1,
+    turbidity: 0.5,
+    rayleigh: 0.2,
     mieCoefficient: 0.005,
     mieDirectionalG: 0.7,
     elevation: 20,
     azimuth: 180,
     exposure: 0.5,
     time: 0,
-    cycleDuration: 60 * 60 * 24
+    cycleDuration: 60 * 1000 // ⚡ Cycle complet de 24h en **1 minute** (60s)
   };
 
   let previousAmbientColor = new THREE.Color();
   let previousSunColor = new THREE.Color();
 
-  // 📌 Création des éléments HTML pour l'horloge et Chorouq/Ghoroub
-  let clockElement = document.createElement("div");
-  clockElement.id = "clock";
-  clockElement.style.position = "absolute";
-  clockElement.style.top = "10px";
-  clockElement.style.left = "10px";
-  clockElement.style.fontSize = "24px";
-  clockElement.style.color = "#fff";
-  clockElement.style.padding = "10px";
-  clockElement.style.background = "rgba(0, 0, 0, 0.5)";
-  clockElement.style.borderRadius = "5px";
-  document.body.appendChild(clockElement);
+  // 📌 **Ajout du conteneur pour afficher l'heure**
+  let timeContainer = document.createElement("div");
+  timeContainer.id = "timeContainer";
+  document.body.appendChild(timeContainer);
 
-  let sunEventElement = document.createElement("div");
-  sunEventElement.id = "sunEvent";
-  sunEventElement.style.position = "absolute";
-  sunEventElement.style.top = "50px";
-  sunEventElement.style.left = "10px";
-  sunEventElement.style.fontSize = "20px";
-  sunEventElement.style.color = "#ffcc00";
-  sunEventElement.style.padding = "10px";
-  sunEventElement.style.background = "rgba(0, 0, 0, 0.5)";
-  sunEventElement.style.borderRadius = "5px";
-  sunEventElement.innerText = "";
-  document.body.appendChild(sunEventElement);
+  let timeLabel = document.createElement("span");
+  timeLabel.innerText = "Hour:";
+  timeContainer.appendChild(timeLabel);
 
-  function updateClock() {
-    const totalSeconds = effectController.time % effectController.cycleDuration;
-    const hours = Math.floor((totalSeconds / 3600) % 24);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    clockElement.innerText = `🕒 ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+  let progressBar = document.createElement("div");
+  progressBar.id = "progressBar";
+  timeContainer.appendChild(progressBar);
 
-    // 📌 Détection du lever et coucher du soleil
-    if (effectController.elevation > -5 && effectController.elevation < 5) {
-      sunEventElement.innerText = "🌅 Lever du soleil (Chorouq)";
-    } else if (effectController.elevation > -15 && effectController.elevation < -5) {
-      sunEventElement.innerText = "🌇 Coucher du soleil (Ghoroub)";
-    } else {
-      sunEventElement.innerText = "";
-    }
-  }
+  let progressFill = document.createElement("div");
+  progressFill.id = "progressFill";
+  progressBar.appendChild(progressFill);
+
+  let timeDisplay = document.createElement("span");
+  timeDisplay.id = "timeDisplay";
+  timeContainer.appendChild(timeDisplay);
+
+  // 📌 **Démarrer le cycle à 6h du matin**
+  const startHour = 6; // Début du cycle à 6h du matin
+  effectController.time = (startHour / 24) * effectController.cycleDuration;
+
+  // 🔄 **Ajustement de la position initiale du soleil**
+  const initialElapsedTime = (effectController.time % effectController.cycleDuration) / effectController.cycleDuration;
+  const initialSinusoidalTime = Math.sin(initialElapsedTime * Math.PI * 2);
+  effectController.elevation = 20 - 90 * initialSinusoidalTime;
 
   function updateSky(deltaTime) {
     const uniforms = sky.material.uniforms;
@@ -95,8 +90,6 @@ export function createSky(scene, renderer) {
     sun.setFromSphericalCoords(1, phi, theta);
     uniforms['sunPosition'].value.copy(sun);
 
-    renderer.toneMappingExposure = effectController.exposure;
-
     let daylightFactor = Math.max(0, Math.sin(phi));
 
     sunLight.intensity = 0.2 + daylightFactor * 1.2;
@@ -106,11 +99,11 @@ export function createSky(scene, renderer) {
     let targetSunColor = new THREE.Color();
 
     if (effectController.elevation > 10) {
-      targetSunColor.set(0xffffff);
+      targetSunColor.set(0x1E90FF);
     } else if (effectController.elevation > 0) {
-      targetSunColor.set(0xffd27f);
+      targetSunColor.set(0x1C1C3A);
     } else {
-      targetSunColor.set(0x222244);
+      targetSunColor.set(0x0a0a32);
     }
 
     lampsLeft.forEach(lampLeft => {
@@ -124,23 +117,43 @@ export function createSky(scene, renderer) {
       }
     });
 
-    // 🎨 Changement des couleurs du ciel selon l'heure
-    if (effectController.elevation < -5) {
-      scene.background = new THREE.Color(0x0a0a32); // Nuit
-      sunMesh.visible = false;
-    } else if (effectController.elevation < 5) {
-      scene.background = new THREE.Color(0xff8800); // Coucher ou lever du soleil
-      sunMesh.material.color.set(0xff5522);
-      sunMesh.visible = true;
+    if (effectController.elevation < 0) {
+      targetAmbientColor.set(0x0a0a32);
+    } else if (effectController.elevation < 10) {
+      targetAmbientColor.set(0x1C1C3A);
     } else {
-      scene.background = new THREE.Color(0x87ceeb); // Bleu ciel de jour
-      sunMesh.material.color.set(0xffff00);
-      sunMesh.visible = true;
+      targetAmbientColor.set(0x1E90FF);
     }
 
-    sunMesh.position.copy(sun.clone().multiplyScalar(100));
+    renderer.toneMappingExposure = 0.3 + (daylightFactor * 0.7);
 
-    updateClock(); // 🕒 Mettre à jour l'horloge et Chorouq/Ghoroub
+    ambientLight.color.lerpColors(previousAmbientColor, targetAmbientColor, deltaTime * 0.5);
+    sunLight.color.lerpColors(previousSunColor, targetSunColor, deltaTime * 0.5);
+
+    previousAmbientColor.copy(ambientLight.color);
+    previousSunColor.copy(sunLight.color);
+
+    stars.visible = effectController.elevation < 0;
+
+    if (effectController.elevation < -10) {
+      scene.background = new THREE.Color(0x0a0a32);
+    } else if (effectController.elevation < 0) {
+      scene.background = new THREE.Color(0x1C1C3A);
+    } else {
+      scene.background = new THREE.Color(0x1E90FF);
+    }
+
+    // 📌 **Mise à jour de l'heure dans le DOM**
+    const totalSeconds = effectController.time % effectController.cycleDuration;
+    const hours = Math.floor((totalSeconds / effectController.cycleDuration) * 24);
+    const minutes = Math.floor(((totalSeconds / effectController.cycleDuration) * 1440) % 60);
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+    timeDisplay.innerText = formattedTime;
+    console.log("Heure actuelle : ", formattedTime); // ✅ Debug console
+
+    const progressPercentage = (totalSeconds / effectController.cycleDuration) * 100;
+    progressFill.style.width = `${progressPercentage}%`;
   }
 
   let lastTime = performance.now();
@@ -166,7 +179,7 @@ export function createSky(scene, renderer) {
     }
 
     updateSky(deltaTime);
-    effectController.time += 400;
+    effectController.time += deltaTime * (effectController.cycleDuration / 60); // 🔄 Ajuste la vitesse du cycle
   }
 
   animateSky();
