@@ -1,68 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="fr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Scene</title>
     <link rel="stylesheet" href="/style.css">
-  </head>
-  <body>
+</head>
+<body>
     <div class="sidebar">
-      <div>
-      <label for="inclinaison">Inclinaison du panneau :</label>
-      <select id="inclinaison">
-        <option value="15" >15°</option>
-        <option value="45">45°</option>
-        <option value="60">60°</option>
-      </select>
-    </div>
-      <!-- Case à cocher pour afficher/masquer le personnage -->
-      <div>
-        <label for="togglePerson">Personnage</label>
-        <input type="checkbox" id="togglePerson">
-      </div>
+        <h2>Paramètres</h2>
+        <hr>
 
-      <!-- Case à cocher pour afficher/masquer la voiture -->
-      <div>
-        <label for="toggleCar">Voiture</label>
-        <input type="checkbox" id="toggleCar">
-      </div>
-      <div>
-        <label for="lampType">Type de Lampe:</label>
-        <select id="lampType">
-          <option value="GRIFF_S">GRIFF S</option>
-          <option value="GRIFF_XL">GRIFF XL</option>
-          <option value="ATINA">ATINA SLIM 6480</option>
-          <option value="TEKK_S">TEKK S</option>
-          <option value="TEKK_M">TEKK M</option>
-        </select>
-      </div>
-      <div>
-        <label for="Longueur">Longueur des lampadaire:</label>
-        <select id="Longueur">
-          <option value="4">4</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-        </select>
-      </div>
-      <div>
-        <label for="formeLumiere">forme de lumiere:</label>
-        <select id="formeLumiere">
-          <option value="Devant">Devant</option>
-          <option value="Côté">Côté</option>
-          <option value="Excentré">Excentré</option>
-          <option value="Centré">Centré</option>
-        </select>
-      </div>
-      
-      
+        <div class="section">
+            <label for="inclinaison">Inclinaison du panneau :</label>
+            <select id="inclinaison">
+                <option value="15">15°</option>
+                <option value="45">45°</option>
+                <option value="60">60°</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <div class="section">
+            <label for="togglePerson">Afficher le personnage</label>
+            <input type="checkbox" id="togglePerson">
+            
+            <label for="toggleCar">Afficher la voiture</label>
+            <input type="checkbox" id="toggleCar">
+        </div>
+
+        <hr>
+
+        <div class="section">
+            <label for="lampType">Type de Lampe :</label>
+            <select id="lampType">
+                <option value="GRIFF_S">GRIFF S</option>
+                <option value="GRIFF_XL">GRIFF XL</option>
+                <option value="ATINA">ATINA SLIM 6480</option>
+                <option value="TEKK_S">TEKK S</option>
+                <option value="TEKK_M">TEKK M</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label for="Longueur">Longueur du lampadaire :</label>
+            <select id="Longueur">
+                <option value="4">4m</option>
+                <option value="6">6m</option>
+                <option value="7">7m</option>
+                <option value="8">8m</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label for="formeLumiere">Forme de lumière :</label>
+            <select id="formeLumiere">
+                <option value="Devant">Devant</option>
+                <option value="Côté">Côté</option>
+                <option value="Excentré">Excentré</option>
+                <option value="Centré">Centré</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <h3>Paramètres des Phases</h3>
+
+        <!-- Génération des phases avec fieldset -->
+        <div class="phases">
+            <!-- Boucle pour générer les phases -->
+            <script>
+                for (let i = 1; i <= 5; i++) {
+                    document.write(`
+                        <fieldset>
+                            <legend>Phase ${i}</legend>
+                            <div class="phase">
+                                <label for="start${i}">Heure de début :</label>
+                                <input type="time" id="start${i}">
+                                
+                                <label for="end${i}">Heure de fin :</label>
+                                <input type="time" id="end${i}">
+                                
+                                <label for="mode${i}">Mode d'éclairage :</label>
+                                <select id="mode${i}">
+                                    <option value="Permanant">Permanent</option>
+                                    <option value="detection">Détection</option>
+                                    <option value="Eteint">Éteint</option>
+                                </select>
+
+                                <label for="power${i}">Puissance :</label>
+                                <input type="number" id="power${i}" min="0" max="100" step="10" value="50">
+                            </div>
+                        </fieldset>
+                    `);
+                }
+            </script>
+        </div>
     </div>
 
-    
     <!-- Zone de rendu 3D -->
     <div id="render-target"></div>
     
     <script type="module" src="/src/main.js"></script>
-  </body>
+</body>
 </html>
