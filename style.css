@@ -5,12 +5,6 @@ body {
   background-color: #f0f0f0;
   overflow: hidden;
 }
-.dg {
-  position: absolute !important;
-  top: 10px;
-  right: 10px;
-  z-index: 9999 !important; /* Assurez-vous qu'il est au-dessus du rendu */
-}
 
 /* Sidebar */
 .sidebar {
@@ -19,35 +13,45 @@ body {
   left: 0;
   width: 250px;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Plus léger pour mieux voir en transparence */
   color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 10;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px); /* Plus de flou pour une meilleure lisibilité */
   border-radius: 10px;
-  align-items: flex-start;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.5);
 }
 
 /* Boutons de la sidebar */
 button {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
-  border: none;
-  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 12px;
   width: 100%;
   margin-bottom: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   font-size: 16px;
+  font-weight: bold;
 }
 
 button:hover {
   background-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
 }
 
 /* Contenu dynamique de la sidebar */
@@ -58,12 +62,7 @@ button:hover {
   align-items: flex-start;
 }
 
-select {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: black;
-  border: none;
-  border-radius: 5px;
-}
+select,
 input[type="range"],
 input[type="checkbox"] {
   width: 100%;
@@ -71,21 +70,39 @@ input[type="checkbox"] {
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 5px;
+  outline: none;
 }
 
-/* Appliquer une disposition en ligne pour les éléments à côté des cases à cocher */
+select {
+  color: black;
+}
+
+/* Personnalisation des barres de défilement */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Disposition des cases à cocher */
 .sidebar div {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* Espacement entre les éléments */
-  align-items: flex-start;
+  margin-bottom: 10px;
 }
 
 .sidebar label {
   margin-right: 10px;
-  align-items: flex-start; /* Espace entre le texte et la case à cocher */
+  font-weight: bold;
 }
 
 #render-target {
@@ -95,4 +112,36 @@ input[type="checkbox"] {
   width: 100vw;
   height: 100vh;
   z-index: 1;
+}
+
+/* Phases */
+.phase {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.phases {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+fieldset {
+  border: 1px solid #aaa;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+legend {
+  font-weight: bold;
+  color: #444;
+}
+
+hr {
+  height: 2px;
+  width: 100%;
+}
+.phase-item {
+  display: flex;
+  flex-direction: column;
 }
