@@ -184,6 +184,7 @@ hr {
 .stop-button:hover {
   background-color: #e53935; /* Couleur rouge plus foncée au survol */
   transform: scale(1.1); /* Légère agrandissement au survol */
+}
 #timeContainer {
   display: flex !important;
   position: absolute;
