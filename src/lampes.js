@@ -6,6 +6,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); // Groupe principal
 
+    
     let brasMaterial = new THREE.MeshStandardMaterial({
         color: 0xffffff,
         metalness: 0.9,
@@ -138,10 +139,66 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         default:
             return null;
     }
+    // Example of setting the current time (this will be dynamic in real-world applications)
+    const currentTime = "19:00"; 
 
-    // ✅ **Création des lumières avec ton switch spécifique**
-    const rectLight = new THREE.RectAreaLight(0xffffaa, 10, 3, 1);
-    const spotLight = new THREE.SpotLight(0xffffaa, 8, 10, Math.PI / 4, 0.5, 2);
+    // Default light settings (Intensity 50%)
+    let rectLight = new THREE.RectAreaLight(0xffffaa, 5, 3, 1);  // RectAreaLight
+    let spotLight = new THREE.SpotLight(0xffffaa, 8, 10, Math.PI / 4, 0.5, 2);  // SpotLight
+
+    // Function to apply lighting settings based on the phase configuration
+    function applyLightingMode(phase) {
+        const mode = document.getElementById(`mode${phase}`).value;
+        const startTime = document.getElementById(`start${phase}`).value;
+        const endTime = document.getElementById(`end${phase}`).value;
+        const power = document.getElementById(`power${phase}`).value;
+
+        console.log(`Phase ${phase} - Mode: ${mode}, Start: ${startTime}, End: ${endTime}, Power: ${power}, Current Time: ${currentTime}`);
+
+        const isInTimeRange = (currentTime >= startTime && currentTime <= endTime);
+
+        if (mode === "Permanant") {
+            if (isInTimeRange) {
+                spotLight.intensity = (power / 100) * 8;  // Adjust intensity based on power
+                rectLight.intensity = (power / 100) * 10;  // Adjust intensity based on power
+            }
+        } else if (mode === "detection") {
+            if (isInTimeRange) {
+                spotLight.intensity = (power / 100) * 8;
+                rectLight.intensity = (power / 100) * 10;
+            }
+        } else if (mode === "Eteint") {
+            if (isInTimeRange) {
+                spotLight.intensity = 0;
+                rectLight.intensity = 0;
+            }
+        }
+    }
+
+    // Add event listeners for dynamic updates when the user changes the inputs
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById(`mode${i}`).addEventListener("change", function() {
+            applyLightingMode(i);
+        });
+
+        document.getElementById(`start${i}`).addEventListener("change", function() {
+            applyLightingMode(i);
+        });
+
+        document.getElementById(`end${i}`).addEventListener("change", function() {
+            applyLightingMode(i);
+        });
+
+        document.getElementById(`power${i}`).addEventListener("input", function() {
+            applyLightingMode(i);
+        });
+    }
+
+    // Apply lighting settings when the page loads, to ensure it's in sync
+    for (let i = 1; i <= 5; i++) {
+        applyLightingMode(i);
+    }
+
 
     switch (formeLumiere) {
         case "Devant":

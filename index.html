@@ -98,10 +98,40 @@
             </script>
         </div>
     </div>
-
+    <button id="toggleButton" class="button run-button" onclick="toggleButton()">
+      <i id="buttonIcon" class="icon">&#x25B6;</i> <!-- Play icon -->
+  </button>
     <!-- Zone de rendu 3D -->
     <div id="render-target"></div>
     
+<script type="module">
+  let isRunning = false; // Variable pour suivre l'état du bouton
+
+    document.addEventListener("DOMContentLoaded", function () {
+      function toggleButton() {
+        const button = document.getElementById("toggleButton");
+        const icon = document.getElementById("buttonIcon");
+
+        if (button.classList.contains("run-button")) {
+            button.classList.remove("run-button");
+            button.classList.add("stop-button");
+            icon.innerHTML = "&#x25A0;"; // Icône "Stop"
+            window.isRunning = true;
+        } else {
+            button.classList.remove("stop-button");
+            button.classList.add("run-button");
+            icon.innerHTML = "&#x25B6;"; // Icône "Play"
+            window.isRunning = false;
+        }
+    }
+
+
+        // Attacher l'événement onclick après le chargement du DOM
+        const button = document.getElementById("toggleButton");
+        button.addEventListener("click", toggleButton);
+    });
+</script>
+
     <script type="module" src="/src/main.js"></script>
 </body>
 </html>

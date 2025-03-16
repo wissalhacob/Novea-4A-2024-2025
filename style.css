@@ -145,3 +145,43 @@ hr {
   display: flex;
   flex-direction: column;
 }
+.button {
+  position: fixed;
+  bottom: 20px; /* Distance from the bottom of the page */
+  right: 20px; /* Distance from the right of the page */
+  width: 60px; /* Width of the button */
+  height: 60px; /* Height of the button */
+  background-color: #4caf50; /* Green background color */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Makes the button circular */
+  font-size: 24px; /* Size of the icon */
+  display: flex;
+  justify-content: center; /* Center the icon horizontally */
+  align-items: center; /* Center the icon vertically */
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.run-button {
+  background-color: #4caf50; /* Couleur de fond verte */
+}
+
+.run-button:hover {
+  background-color: #45a049; /* Couleur verte plus foncée au survol */
+  transform: scale(1.1); /* Légère agrandissement au survol */
+}
+
+.icon {
+  font-size: 30px; /* Taille de l'icône dans le bouton */
+  transition: transform 0.2s; /* Pour l'animation de l'icône si besoin */
+}
+.stop-button {
+  background-color: #f44336; /* Couleur de fond rouge */
+}
+
+.stop-button:hover {
+  background-color: #e53935; /* Couleur rouge plus foncée au survol */
+  transform: scale(1.1); /* Légère agrandissement au survol */
+}
