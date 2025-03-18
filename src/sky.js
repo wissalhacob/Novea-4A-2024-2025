@@ -150,7 +150,6 @@ export function createSky(scene, renderer) {
     const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 
     timeDisplay.innerText = formattedTime;
-    console.log("Heure actuelle : ", formattedTime); // ✅ Debug console
 
     const progressPercentage = (totalSeconds / effectController.cycleDuration) * 100;
     progressFill.style.width = `${progressPercentage}%`;

@@ -139,8 +139,11 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         default:
             return null;
     }
-    // Example of setting the current time (this will be dynamic in real-world applications)
-    const currentTime = "19:00"; 
+    let currentTime = "6:00"; // Default time
+
+    // Access the input element by its ID
+    let timeDisplayElement = document.getElementById('timeDisplay');
+    
 
     // Default light settings (Intensity 50%)
     let rectLight = new THREE.RectAreaLight(0xffffaa, 5, 3, 1);  // RectAreaLight
@@ -152,15 +155,19 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         const startTime = document.getElementById(`start${phase}`).value;
         const endTime = document.getElementById(`end${phase}`).value;
         const power = document.getElementById(`power${phase}`).value;
-
+        setInterval(() => {
+            let timeDisplayElement = document.getElementById('timeDisplay');
+            if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
+                currentTime = timeDisplayElement.innerText;  // Update with new time
+            }       
         console.log(`Phase ${phase} - Mode: ${mode}, Start: ${startTime}, End: ${endTime}, Power: ${power}, Current Time: ${currentTime}`);
 
         const isInTimeRange = (currentTime >= startTime && currentTime <= endTime);
 
         if (mode === "Permanant") {
             if (isInTimeRange) {
-                spotLight.intensity = (power / 100) * 8;  // Adjust intensity based on power
-                rectLight.intensity = (power / 100) * 10;  // Adjust intensity based on power
+                spotLight.intensity = (power / 100) * 8;  
+                rectLight.intensity = (power / 100) * 10;  
             }
         } else if (mode === "detection") {
             if (isInTimeRange) {
@@ -172,7 +179,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
                 spotLight.intensity = 0;
                 rectLight.intensity = 0;
             }
-        }
+        } }, 0.01); 
     }
 
     // Add event listeners for dynamic updates when the user changes the inputs
