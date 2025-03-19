@@ -147,6 +147,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
 
     // Default light settings (Intensity 50%)
     let rectLight = new THREE.RectAreaLight(0xffffaa, 5, 3, 1);  // RectAreaLight
+    
     let spotLight = new THREE.SpotLight(0xffffaa, 8, 10, Math.PI / 4, 0.5, 2);  // SpotLight
 
     // Function to apply lighting settings based on the phase configuration
@@ -178,7 +179,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
                 spotLight.intensity = 0;
                 rectLight.intensity = 0;
             }
-        } }, 0.01); 
+        } }, 0.001); 
     }
 
     // Add event listeners for dynamic updates when the user changes the inputs
