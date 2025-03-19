@@ -154,10 +154,12 @@ export function createSky(scene, renderer) {
     const progressPercentage = (totalSeconds / effectController.cycleDuration) * 100;
     progressFill.style.width = `${progressPercentage}%`;
   }
+  let isRunning = false;
 
   let lastTime = performance.now();
 
   function animateSky() {
+    if (isRunning) {
     requestAnimationFrame(animateSky);
 
     let currentTime = performance.now();
@@ -178,8 +180,24 @@ export function createSky(scene, renderer) {
     }
 
     updateSky(deltaTime);
-    effectController.time += deltaTime * (effectController.cycleDuration / 60); // 🔄 Ajuste la vitesse du cycle
+    effectController.time += deltaTime * (effectController.cycleDuration / 60); 
   }
+  }
+  let runState = document.getElementById("buttonIcon");
+
+  if (runState) { // Vérifier si l'élément existe
+    runState.addEventListener("click", function () {
+      if (runState.innerText.trim() === "▶") {
+        isRunning = true;
+        lastTime = performance.now();
+        animateSky();
+        runState.innerText = "■"; 
+      } else {
+        isRunning = false;
+        runState.innerText = "▶"; 
+      }
+    });
+  } 
 
   animateSky();
   return sky;

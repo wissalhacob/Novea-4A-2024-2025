@@ -160,7 +160,6 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
             if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
                 currentTime = timeDisplayElement.innerText;  // Update with new time
             }       
-        console.log(`Phase ${phase} - Mode: ${mode}, Start: ${startTime}, End: ${endTime}, Power: ${power}, Current Time: ${currentTime}`);
 
         const isInTimeRange = (currentTime >= startTime && currentTime <= endTime);
 

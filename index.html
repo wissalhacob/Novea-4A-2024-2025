@@ -134,7 +134,7 @@
         </div>
     </div>
     <button id="toggleButton" class="button run-button" onclick="toggleButton()">
-      <i id="buttonIcon" class="icon">&#x25B6;</i> <!-- Play icon -->
+      <i id="buttonIcon" class="icon">▶</i> 
   </button>
     <!-- Zone de rendu 3D -->
     <div id="render-target"></div>
@@ -150,12 +150,12 @@
         if (button.classList.contains("run-button")) {
             button.classList.remove("run-button");
             button.classList.add("stop-button");
-            icon.innerHTML = "&#x25A0;"; // Icône "Stop"
+            icon.innerText = "■"; // Icône "Stop"
             window.isRunning = true;
         } else {
             button.classList.remove("stop-button");
             button.classList.add("run-button");
-            icon.innerHTML = "&#x25B6;"; // Icône "Play"
+            icon.innerText = "▶"; // Icône "Play"
             window.isRunning = false;
         }
     }
