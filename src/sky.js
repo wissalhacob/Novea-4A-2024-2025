@@ -45,6 +45,7 @@ export function createSky(scene, renderer) {
   let previousAmbientColor = new THREE.Color();
   let previousSunColor = new THREE.Color();
 
+  
   let timeContainer = document.createElement("div");
   timeContainer.id = "timeContainer";
   document.body.appendChild(timeContainer);
@@ -57,7 +58,7 @@ export function createSky(scene, renderer) {
 
   function updateSky(deltaTime) {
     const cycleProgress = (effectController.time % effectController.cycleDuration) / effectController.cycleDuration;
-    const adjustedCycleProgress = Math.pow(cycleProgress, 1.2); // Ralentit le coucher du soleil
+    const adjustedCycleProgress = Math.pow(cycleProgress, 1.2); 
     const sinusoidalTime = Math.sin((adjustedCycleProgress - 0.25) * Math.PI * 2);
 
     effectController.elevation = -9000000 + 180 * sinusoidalTime;
