@@ -1,7 +1,13 @@
 import * as THREE from 'three';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
+import { userData } from 'three/tsl';
 
+function timeToMinutes(timeStr) {
+    if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
+    let [hours, minutes] = timeStr.split(":");
+    return parseInt(hours) * 60 + parseInt(minutes);
+}
 export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); // Groupe principal
@@ -139,73 +145,94 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         default:
             return null;
     }
-    let currentTime = "6:00"; // Default time
+    let currentTime = "00:00"; // Default time
 
     // Access the input element by its ID
     let timeDisplayElement = document.getElementById('timeDisplay');
     
 
-    // Default light settings (Intensity 50%)
-    let rectLight = new THREE.RectAreaLight(0xffffaa, 5, 3, 1);  // RectAreaLight
     
-    let spotLight = new THREE.SpotLight(0xffffaa, 8, 10, Math.PI / 4, 0.5, 2);  // SpotLight
+    let rectLight = new THREE.RectAreaLight(0xffffaa,6,  3, 1);  // RectAreaLight
+    
+    let spotLight = new THREE.SpotLight(0xffffaa, 10, 10, Math.PI / 4, 0.5, 2);  
+let startTimeInMinutes = 420; // 07:00
+let endTimeInMinutes = 1140; // 19:00
+    setInterval(() => {
+        if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
+            currentTime = timeDisplayElement.innerText; 
+            
+            const currentTimeInMinutes = timeToMinutes(currentTime);
+            if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
+                rectLight.intensity = -6;
+            } else {
+                // En dehors de la plage horaire : la lumière est à 50% (intensité à 6)
+                rectLight.intensity = 6;
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                ["mode", "start", "end", "power"].forEach(attr => {
+                    document.getElementById(`${attr}${i}`).addEventListener("input", function () {
+        
+                        applyLightingMode(i);
+                    });
+                });
+                applyLightingMode(i);
+    
+        }
+        }
+    } ,0.001);
 
     // Function to apply lighting settings based on the phase configuration
     function applyLightingMode(phase) {
+        
         const mode = document.getElementById(`mode${phase}`).value;
         const startTime = document.getElementById(`start${phase}`).value;
         const endTime = document.getElementById(`end${phase}`).value;
         const power = document.getElementById(`power${phase}`).value;
-        setInterval(() => {
-            let timeDisplayElement = document.getElementById('timeDisplay');
-            if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
-                currentTime = timeDisplayElement.innerText;  // Update with new time
-            }       
 
-        const isInTimeRange = (currentTime >= startTime && currentTime <= endTime);
+            const currentTimeInMinutes = timeToMinutes(currentTime);
+            const startTimeInMinutes = timeToMinutes(startTime);
+            const endTimeInMinutes = timeToMinutes(endTime);
+    
+            const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
+    
+            console.log(`Phase ${phase} - Mode: ${mode}, Start: ${startTime}, End: ${endTime}, Power: ${power}, Current Time: ${currentTime} (Minutes: ${currentTimeInMinutes}), isInTimeRange: ${isInTimeRange}`);
 
         if (mode === "Permanant") {
             if (isInTimeRange) {
-                spotLight.intensity = (power / 100) * 8;  
-                rectLight.intensity = (power / 100) * 10;  
+                spotLight.intensity = (power / 100)*20 ;  
+                rectLight.intensity = (power / 100)*15;   
             }
         } else if (mode === "detection") {
             if (isInTimeRange) {
-                spotLight.intensity = (power / 100) * 8;
-                rectLight.intensity = (power / 100) * 10;
+                spotLight.intensity = (power / 100) * 20;
+                rectLight.intensity = (power / 100) * 15;
             }
         } else if (mode === "Eteint") {
             if (isInTimeRange) {
-                spotLight.intensity = 0;
-                rectLight.intensity = 0;
+                spotLight.intensity = -6;
+                rectLight.intensity = -6;
             }
-        } }, 0.001); 
+        }
     }
 
-    // Add event listeners for dynamic updates when the user changes the inputs
-    for (let i = 1; i <= 5; i++) {
-        document.getElementById(`mode${i}`).addEventListener("change", function() {
-            applyLightingMode(i);
-        });
 
-        document.getElementById(`start${i}`).addEventListener("change", function() {
-            applyLightingMode(i);
-        });
 
-        document.getElementById(`end${i}`).addEventListener("change", function() {
-            applyLightingMode(i);
-        });
-
-        document.getElementById(`power${i}`).addEventListener("input", function() {
-            applyLightingMode(i);
-        });
-    }
-
-    // Apply lighting settings when the page loads, to ensure it's in sync
-    for (let i = 1; i <= 5; i++) {
-        applyLightingMode(i);
-    }
-
+    setInterval(() => {
+        if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
+            currentTime = timeDisplayElement.innerText; 
+            for (let i = 1; i <= 5; i++) {
+                ["mode", "start", "end", "power"].forEach(attr => {
+                    document.getElementById(`${attr}${i}`).addEventListener("input", function () {
+        
+                        applyLightingMode(i);
+                    });
+                });
+                applyLightingMode(i);
+    
+        }
+        }
+    } ,0.001);
 
     switch (formeLumiere) {
         case "Devant":

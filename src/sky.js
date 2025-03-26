@@ -44,11 +44,16 @@ export function createSky(scene, renderer) {
 
   let previousAmbientColor = new THREE.Color();
   let previousSunColor = new THREE.Color();
-
   
+
   let timeContainer = document.createElement("div");
   timeContainer.id = "timeContainer";
   document.body.appendChild(timeContainer);
+
+  let timetexte = document.createElement("p");
+  timetexte.id = "timeTexte";
+  timetexte.innerText = "heure: ";
+  timeContainer.appendChild(timetexte);
 
   let timeDisplay = document.createElement("span");
   timeDisplay.id = "timeDisplay";

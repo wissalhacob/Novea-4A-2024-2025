@@ -17,7 +17,7 @@ export function createScene() {
   // Initialisation d'OrbitControls
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.dampingFactor = 0.2;
+  controls.dampingFactor = 0.1;
   controls.zoomSpeed = 0.5;
   controls.rotateSpeed = 1.0;
   controls.screenSpacePanning = false;
@@ -25,12 +25,10 @@ export function createScene() {
   controls.maxDistance = 50;
   controls.maxPolarAngle = Math.PI / 2;
 
-  camera.position.set(0, 15, 20);
+  camera.position.set(25, 10, 30);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-  // Appel à la fonction createSky pour ajouter le ciel
+  controls.update();
   createSky(scene, renderer);
-  // Fonction d'animation
   function animate() {
     controls.update();
     renderer.render(scene, camera);
