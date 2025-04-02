@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 import { userData } from 'three/tsl';
-
+import { animationActive } from './person.js';
 function timeToMinutes(timeStr) {
     if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
     let [hours, minutes] = timeStr.split(":");
@@ -152,11 +152,12 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     
 
     
-    let rectLight = new THREE.RectAreaLight(0xffffaa,6,  3, 1);  // RectAreaLight
+    let rectLight = new THREE.RectAreaLight(0xffffaa,6,  3, 1);  
     
     let spotLight = new THREE.SpotLight(0xffffaa, 10, 10, Math.PI / 4, 0.5, 2);  
-let startTimeInMinutes = 420; // 07:00
-let endTimeInMinutes = 1140; // 19:00
+    let startTimeInMinutes = 420; // 07:00
+    let endTimeInMinutes = 1140; // 19:00
+
     setInterval(() => {
         if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
             currentTime = timeDisplayElement.innerText; 
@@ -165,14 +166,12 @@ let endTimeInMinutes = 1140; // 19:00
             if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
                 rectLight.intensity = -6;
             } else {
-                // En dehors de la plage horaire : la lumière est à 50% (intensité à 6)
                 rectLight.intensity = 6;
             }
 
             for (let i = 1; i <= 5; i++) {
                 ["mode", "start", "end", "power"].forEach(attr => {
                     document.getElementById(`${attr}${i}`).addEventListener("input", function () {
-        
                         applyLightingMode(i);
                     });
                 });
@@ -182,6 +181,8 @@ let endTimeInMinutes = 1140; // 19:00
         }
     } ,0.001);
 
+
+    
     // Function to apply lighting settings based on the phase configuration
     function applyLightingMode(phase) {
         
@@ -196,19 +197,37 @@ let endTimeInMinutes = 1140; // 19:00
     
             const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
     
-            console.log(`Phase ${phase} - Mode: ${mode}, Start: ${startTime}, End: ${endTime}, Power: ${power}, Current Time: ${currentTime} (Minutes: ${currentTimeInMinutes}), isInTimeRange: ${isInTimeRange}`);
 
         if (mode === "Permanant") {
             if (isInTimeRange) {
                 spotLight.intensity = (power / 100)*20 ;  
                 rectLight.intensity = (power / 100)*15;   
             }
-        } else if (mode === "detection") {
+        } 
+        else if (mode === "detection") {
             if (isInTimeRange) {
-                spotLight.intensity = (power / 100) * 20;
-                rectLight.intensity = (power / 100) * 15;
+                     
+                        console.log(animationActive);
+        
+                        function turnOnLightSequentially() {
+                            if (animationActive===true) {
+                                rectLight.intensity = (power / 100) * 15;
+                                setTimeout(turnOnLightSequentially, 1000);
+                            }
+                            else if (animationActive===false){
+                                console.log(animationActive);
+                                spotLight.intensity = -6;
+                                rectLight.intensity = -6;
+                            }
+                            }
+                        turnOnLightSequentially();
+                    
+
+
             }
-        } else if (mode === "Eteint") {
+        }
+        
+        else if (mode === "Eteint") {
             if (isInTimeRange) {
                 spotLight.intensity = -6;
                 rectLight.intensity = -6;
@@ -224,12 +243,10 @@ let endTimeInMinutes = 1140; // 19:00
             for (let i = 1; i <= 5; i++) {
                 ["mode", "start", "end", "power"].forEach(attr => {
                     document.getElementById(`${attr}${i}`).addEventListener("input", function () {
-        
-                        applyLightingMode(i);
+                            applyLightingMode(i); 
                     });
                 });
                 applyLightingMode(i);
-    
         }
         }
     } ,0.001);

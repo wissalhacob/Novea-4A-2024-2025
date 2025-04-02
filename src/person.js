@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+export let animationActive = false;
 export function create_person(scene) {
     const loader = new GLTFLoader();
     let modelGroup = null;
     let model = null;
     let clock = new THREE.Clock();
-    let animationActive = true;
     let step = 0; // Variable pour simuler le mouvement des jambes
 
     let leftLeg, rightLeg, leftKnee, rightKnee, leftArm, rightArm;
