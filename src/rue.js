@@ -2,11 +2,23 @@ import * as THREE from 'three';
 import { create_panneaux_sol } from './panneaux_sol';
 import { create_lampes } from './lampes';
 import { create_pole } from './poles';
-
+import { animationActive } from './person.js';
+import { animationActiveCar } from './car.js';
+import { positionZ } from './person.js';
+import { positionZCar } from './car.js';
+export  const lampPostPositions = [];
+export  const lampsLeft = [];
+export const lampsRight = [];
+function timeToMinutes(timeStr) {
+    if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
+    let [hours, minutes] = timeStr.split(":");
+    return parseInt(hours) * 60 + parseInt(minutes);
+}
 export function createRoad(scene) {
     const textureLoader = new THREE.TextureLoader();
+    let currentTime = "00:00";
 
-    // Création de la route
+    
     const roadGeometry = new THREE.BoxGeometry(12, 0.1, 200);
     const roadTexture = textureLoader.load('/models/texture/route_texture.png');
     roadTexture.wrapS = THREE.RepeatWrapping;
@@ -52,9 +64,10 @@ export function createRoad(scene) {
     scene.add(sidewalkRight);
 
     const lampPosts = [];
-
     function createLampPost(x, z) {
         const group = new THREE.Group();
+        const isRightSide = x > 0;
+        group.rotation.y = isRightSide ? Math.PI/2 : -Math.PI/2;
         const { pole } = create_pole(scene, document.getElementById('Longueur').value);
         group.add(pole);
 
@@ -82,14 +95,17 @@ export function createRoad(scene) {
         const selectedLongueur = document.getElementById('Longueur').value;
         const selectedFormeLumiere = document.getElementById('formeLumiere').value;
         
-        const { lampe } = create_lampes(scene, selectedLampType, selectedLongueur, selectedFormeLumiere);
+        
+        const { lampe  } = create_lampes(scene, selectedLampType, selectedLongueur, selectedFormeLumiere);
         lampe.castShadow = true;
         lampe.receiveShadow = true;
         group.add(lampe);
-
-        // Ajout des lampadaires
+        
+        
         const lampPost = { group, lampe, solarPanel };
         lampPosts.push(lampPost);
+
+        lampPostPositions.push(z);
 
         group.position.set(x, 0, z);
         return lampPost;
@@ -128,7 +144,7 @@ export function createRoad(scene) {
 
     const lampsLeft = [];
     const lampsRight = [];
-
+    
     // **Ajout des lampadaires à gauche et à droite**
     for (let i = -20; i <= 20; i += 10) {
         const lampPostLeft = createLampPost(-10, i);
@@ -139,6 +155,105 @@ export function createRoad(scene) {
         scene.add(lampPostRight.group);
         lampsRight.push(lampPostRight);
     }
+   
 
-    return { lampsLeft, lampsRight };
+
+    let timeDisplayElement = document.getElementById('timeDisplay');
+
+
+
+    function applyLightingMode(phase) {
+            
+            const mode = document.getElementById(`mode${phase}`).value;
+            const startTime = document.getElementById(`start${phase}`).value;
+            const endTime = document.getElementById(`end${phase}`).value;
+            const power = document.getElementById(`power${phase}`).value;
+    
+            const currentTimeInMinutes = timeToMinutes(currentTime);
+                const startTimeInMinutes = timeToMinutes(startTime);
+                const endTimeInMinutes = timeToMinutes(endTime);
+        
+                const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
+        
+    
+        if (mode === "detection") {
+            if (isInTimeRange ) {
+
+
+                if (animationActive  ) {  
+                    lampsLeft.forEach((lampPost) => {                              
+                            if (lampPost.group.position.z<= positionZ-2 ) { 
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                            }   
+                            else{
+
+                                    lampPost.lampe.userData.rectLight.intensity =  0;
+                          
+                            }    
+                    });
+            
+                    lampsRight.forEach((lampPost) => {                 
+                            if (lampPost.group.position.z<= positionZ-2) { 
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                            }     
+                            else{
+
+                                    lampPost.lampe.userData.rectLight.intensity =  0;
+                         
+                            }    
+                                
+                    });
+                }
+
+                if (animationActiveCar ) {  
+                    lampsLeft.forEach((lampPost) => {                              
+                            if (lampPost.group.position.z >= positionZCar+6){ 
+                                console.log(lampPost.group.position.z);
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                            }  
+                            else{
+   
+                                    lampPost.lampe.userData.rectLight.intensity =  0;
+                            
+                            }    
+                                
+                               
+                    });
+            
+                    lampsRight.forEach((lampPost) => {                 
+                            if (lampPost.group.position.z>= positionZCar+6) { 
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                            }  
+                            else{
+ 
+                                    lampPost.lampe.userData.rectLight.intensity =  0;
+                          
+                            }    
+                                     
+                                
+                    });
+                }
+            }
+        }
+           
+        }
+    
+    
+    
+        setInterval(() => {
+            if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
+                currentTime = timeDisplayElement.innerText; 
+                for (let i = 1; i <= 5; i++) {
+                    ["mode", "start", "end", "power"].forEach(attr => {
+                        document.getElementById(`${attr}${i}`).addEventListener("input", function () {
+                                applyLightingMode(i); 
+                        });
+                    });
+                    applyLightingMode(i);
+            }
+            }
+        } ,0.001);
+
+
+    return {lampsLeft,lampsRight};
 }

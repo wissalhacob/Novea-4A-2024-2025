@@ -2,6 +2,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export let animationActive = false;
+export let positionZ =null;
+export let positionX = null;
+export let positionY = null;
+
 export function create_person(scene) {
     const loader = new GLTFLoader();
     let modelGroup = null;
@@ -72,6 +76,11 @@ export function create_person(scene) {
                     if (model.position.z > 25) {
                         model.position.z = -20;
                     }
+                    positionZ=model.position.z;
+                    positionX = model.position.x;
+                    positionY = model.position.y;
+                    
+
                 }
                 requestAnimationFrame(animatePerson);
             }

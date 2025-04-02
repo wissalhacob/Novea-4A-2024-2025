@@ -3,6 +3,7 @@ import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLigh
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 import { userData } from 'three/tsl';
 import { animationActive } from './person.js';
+import { animationActiveCar } from './car.js';
 function timeToMinutes(timeStr) {
     if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
     let [hours, minutes] = timeStr.split(":");
@@ -164,7 +165,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
             
             const currentTimeInMinutes = timeToMinutes(currentTime);
             if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
-                rectLight.intensity = -6;
+                rectLight.intensity = 0;
             } else {
                 rectLight.intensity = 6;
             }
@@ -207,20 +208,11 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         else if (mode === "detection") {
             if (isInTimeRange) {
                      
-                        console.log(animationActive);
-        
-                        function turnOnLightSequentially() {
-                            if (animationActive===true) {
-                                rectLight.intensity = (power / 100) * 15;
-                                setTimeout(turnOnLightSequentially, 1000);
+                            if (animationActive===false && animationActiveCar===false ){
+                                spotLight.intensity = 0;
+                                rectLight.intensity = 0;
                             }
-                            else if (animationActive===false){
-                                console.log(animationActive);
-                                spotLight.intensity = -6;
-                                rectLight.intensity = -6;
-                            }
-                            }
-                        turnOnLightSequentially();
+                            
                     
 
 
@@ -229,8 +221,8 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         
         else if (mode === "Eteint") {
             if (isInTimeRange) {
-                spotLight.intensity = -6;
-                rectLight.intensity = -6;
+                spotLight.intensity = 0;
+                rectLight.intensity = 0;
             }
         }
     }
