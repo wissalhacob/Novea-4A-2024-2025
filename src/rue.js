@@ -6,9 +6,7 @@ import { animationActive } from './person.js';
 import { animationActiveCar } from './car.js';
 import { positionZ } from './person.js';
 import { positionZCar } from './car.js';
-export  const lampPostPositions = [];
-export  const lampsLeft = [];
-export const lampsRight = [];
+
 function timeToMinutes(timeStr) {
     if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
     let [hours, minutes] = timeStr.split(":");
@@ -16,8 +14,8 @@ function timeToMinutes(timeStr) {
 }
 export function createRoad(scene) {
     const textureLoader = new THREE.TextureLoader();
-    let currentTime = "00:00";
-
+    const lampsLeft = [];
+    const lampsRight = [];
     
     const roadGeometry = new THREE.BoxGeometry(12, 0.1, 200);
     const roadTexture = textureLoader.load('/models/texture/route_texture.png');
@@ -105,7 +103,7 @@ export function createRoad(scene) {
         const lampPost = { group, lampe, solarPanel };
         lampPosts.push(lampPost);
 
-        lampPostPositions.push(z);
+        
 
         group.position.set(x, 0, z);
         return lampPost;
@@ -142,8 +140,7 @@ export function createRoad(scene) {
     document.getElementById('Longueur').addEventListener('change', updateLamp);
     document.getElementById('formeLumiere').addEventListener('change', updateLamp);
 
-    const lampsLeft = [];
-    const lampsRight = [];
+
     
     // **Ajout des lampadaires à gauche et à droite**
     for (let i = -20; i <= 20; i += 10) {
@@ -157,10 +154,48 @@ export function createRoad(scene) {
     }
    
 
-
+    let currentTime = "00:00"; 
     let timeDisplayElement = document.getElementById('timeDisplay');
 
+    let startTimeInMinutes = 420; // 07:00
+    let endTimeInMinutes = 1140; // 19:00
 
+    setInterval(() => {
+        if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
+            currentTime = timeDisplayElement.innerText; 
+            
+            const currentTimeInMinutes = timeToMinutes(currentTime);
+            if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
+                lampsLeft.forEach((lampPost) => {                              
+                        lampPost.lampe.userData.rectLight.intensity = 0;
+                    }   
+                );
+                lampsRight.forEach((lampPost) => {                 
+                        lampPost.lampe.userData.rectLight.intensity = 0;
+                    }    
+                );
+            } else {
+                lampsLeft.forEach((lampPost) => {                              
+                        lampPost.lampe.userData.rectLight.intensity =6;
+                    }   
+                );
+                lampsRight.forEach((lampPost) => {                 
+                        lampPost.lampe.userData.rectLight.intensity =6;
+                    }    
+                );
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                ["mode", "start", "end", "power"].forEach(attr => {
+                    document.getElementById(`${attr}${i}`).addEventListener("input", function () {
+                        applyLightingMode(i);
+                    });
+                });
+                applyLightingMode(i);
+    
+        }
+        }
+    } ,0.001);
 
     function applyLightingMode(phase) {
             
@@ -170,46 +205,43 @@ export function createRoad(scene) {
             const power = document.getElementById(`power${phase}`).value;
     
             const currentTimeInMinutes = timeToMinutes(currentTime);
-                const startTimeInMinutes = timeToMinutes(startTime);
-                const endTimeInMinutes = timeToMinutes(endTime);
+            const startTimeInMinutes = timeToMinutes(startTime);
+            const endTimeInMinutes = timeToMinutes(endTime);
         
-                const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
-        
+            const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
+
     
-        if (mode === "detection") {
-            if (isInTimeRange ) {
+        if (mode === "detection" && isInTimeRange) {
+            if (animationActive  ) {  
+                            lampsLeft.forEach((lampPost) => {                              
+                                    if (lampPost.group.position.z<= positionZ) { 
 
+                                        lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                    }   
+                                    else{
+                                            lampPost.lampe.userData.rectLight.intensity =  0;
+                                    }    
+                            });
+                    
+                            lampsRight.forEach((lampPost) => {                 
+                                    if (lampPost.group.position.z<= positionZ) { 
+                                        lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                    }     
+                                    else{
 
-                if (animationActive  ) {  
-                    lampsLeft.forEach((lampPost) => {                              
-                            if (lampPost.group.position.z<= positionZ-2 ) { 
-                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
-                            }   
-                            else{
-
-                                    lampPost.lampe.userData.rectLight.intensity =  0;
-                          
-                            }    
-                    });
-            
-                    lampsRight.forEach((lampPost) => {                 
-                            if (lampPost.group.position.z<= positionZ-2) { 
-                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
-                            }     
-                            else{
-
-                                    lampPost.lampe.userData.rectLight.intensity =  0;
-                         
-                            }    
+                                            lampPost.lampe.userData.rectLight.intensity =  0;
                                 
-                    });
-                }
+                                    }    
+                                        
+                            });
+                        }
+            
 
                 if (animationActiveCar ) {  
                     lampsLeft.forEach((lampPost) => {                              
-                            if (lampPost.group.position.z >= positionZCar+6){ 
+                            if (lampPost.group.position.z >= positionZCar){ 
                                 console.log(lampPost.group.position.z);
-                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
                             }  
                             else{
    
@@ -221,8 +253,8 @@ export function createRoad(scene) {
                     });
             
                     lampsRight.forEach((lampPost) => {                 
-                            if (lampPost.group.position.z>= positionZCar+6) { 
-                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 15;
+                            if (lampPost.group.position.z>= positionZCar) { 
+                                lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
                             }  
                             else{
  
@@ -233,26 +265,59 @@ export function createRoad(scene) {
                                 
                     });
                 }
-            }
+                if (animationActive===false && animationActiveCar===false ){
+                    lampsRight.forEach((lampPost) => { 
+                        lampPost.lampe.userData.rectLight.intensity =  0;
+                          
+                   });
+                   lampsLeft.forEach((lampPost) => { 
+                    lampPost.lampe.userData.rectLight.intensity =  0;
+                      
+               });
+                }
+            
+        }
+        else if (mode === "Permanant" && isInTimeRange) {
+            lampsLeft.forEach((lampPost) => {                              
+                    lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                }   
+            );
+            lampsRight.forEach((lampPost) => {                 
+                    lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                }    
+            );
+        }
+        else if (mode=="Eteint" && isInTimeRange) {
+            lampsLeft.forEach((lampPost) => {                              
+                    lampPost.lampe.userData.rectLight.intensity =  0;
+                }   
+            );
+            lampsRight.forEach((lampPost) => {                 
+                    lampPost.lampe.userData.rectLight.intensity =  0;
+                }    
+            );
         }
            
-        }
-    
-    
-    
+            
+    }
+
         setInterval(() => {
             if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
                 currentTime = timeDisplayElement.innerText; 
                 for (let i = 1; i <= 5; i++) {
                     ["mode", "start", "end", "power"].forEach(attr => {
                         document.getElementById(`${attr}${i}`).addEventListener("input", function () {
+                            console.log(`${attr}${i}`);
+                            console.log(document.getElementById(`${attr}${i}`).value);
+                            console.log("applyLightingMode");
                                 applyLightingMode(i); 
                         });
                     });
                     applyLightingMode(i);
             }
             }
-        } ,0.001);
+        }
+        , 0.001); 
 
 
     return {lampsLeft,lampsRight};

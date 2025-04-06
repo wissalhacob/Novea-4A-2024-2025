@@ -5,13 +5,13 @@ import { userData } from 'three/tsl';
 import { animationActive } from './person.js';
 import { animationActiveCar } from './car.js';
 function timeToMinutes(timeStr) {
-    if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
+    if (!timeStr || !timeStr.includes(":")) return -1; 
     let [hours, minutes] = timeStr.split(":");
     return parseInt(hours) * 60 + parseInt(minutes);
 }
 export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const loader = new GLTFLoader();
-    const lampGroup = new THREE.Group(); // Groupe principal
+    const lampGroup = new THREE.Group(); 
 
     
     let brasMaterial = new THREE.MeshStandardMaterial({
@@ -46,7 +46,6 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     let bras;
     let modelPath = null;
 
-    // ✅ **Ton switch (typeBras) conservé tel quel**
     switch (typeBras) {
         case "GRIFF_S":
             modelPath = "./models/source/griff.glb";
@@ -146,102 +145,20 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
         default:
             return null;
     }
-    let currentTime = "00:00"; // Default time
-
-    // Access the input element by its ID
+    let currentTime = "00:00"; 
     let timeDisplayElement = document.getElementById('timeDisplay');
     
 
     
-    let rectLight = new THREE.RectAreaLight(0xffffaa,6,  3, 1);  
+    let rectLight = new THREE.RectAreaLight(0xffffaa,0,  3, 1);  
     
     let spotLight = new THREE.SpotLight(0xffffaa, 10, 10, Math.PI / 4, 0.5, 2);  
     let startTimeInMinutes = 420; // 07:00
     let endTimeInMinutes = 1140; // 19:00
 
-    setInterval(() => {
-        if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
-            currentTime = timeDisplayElement.innerText; 
-            
-            const currentTimeInMinutes = timeToMinutes(currentTime);
-            if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
-                rectLight.intensity = 0;
-            } else {
-                rectLight.intensity = 6;
-            }
-
-            for (let i = 1; i <= 5; i++) {
-                ["mode", "start", "end", "power"].forEach(attr => {
-                    document.getElementById(`${attr}${i}`).addEventListener("input", function () {
-                        applyLightingMode(i);
-                    });
-                });
-                applyLightingMode(i);
-    
-        }
-        }
-    } ,0.001);
 
 
-    
-    // Function to apply lighting settings based on the phase configuration
-    function applyLightingMode(phase) {
-        
-        const mode = document.getElementById(`mode${phase}`).value;
-        const startTime = document.getElementById(`start${phase}`).value;
-        const endTime = document.getElementById(`end${phase}`).value;
-        const power = document.getElementById(`power${phase}`).value;
-
-            const currentTimeInMinutes = timeToMinutes(currentTime);
-            const startTimeInMinutes = timeToMinutes(startTime);
-            const endTimeInMinutes = timeToMinutes(endTime);
-    
-            const isInTimeRange = (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes);
-    
-
-        if (mode === "Permanant") {
-            if (isInTimeRange) {
-                spotLight.intensity = (power / 100)*20 ;  
-                rectLight.intensity = (power / 100)*15;   
-            }
-        } 
-        else if (mode === "detection") {
-            if (isInTimeRange) {
-                     
-                            if (animationActive===false && animationActiveCar===false ){
-                                spotLight.intensity = 0;
-                                rectLight.intensity = 0;
-                            }
-                            
-                    
-
-
-            }
-        }
-        
-        else if (mode === "Eteint") {
-            if (isInTimeRange) {
-                spotLight.intensity = 0;
-                rectLight.intensity = 0;
-            }
-        }
-    }
-
-
-
-    setInterval(() => {
-        if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
-            currentTime = timeDisplayElement.innerText; 
-            for (let i = 1; i <= 5; i++) {
-                ["mode", "start", "end", "power"].forEach(attr => {
-                    document.getElementById(`${attr}${i}`).addEventListener("input", function () {
-                            applyLightingMode(i); 
-                    });
-                });
-                applyLightingMode(i);
-        }
-        }
-    } ,0.001);
+ 
 
     switch (formeLumiere) {
         case "Devant":
@@ -306,6 +223,7 @@ export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     lampGroup.add(rectLight);
     lampGroup.add(spotLight);
     lampGroup.add(support);
+    lampGroup.userData.rectLight = rectLight;
     scene.add(lampGroup);
 
     return { lampe: lampGroup };
