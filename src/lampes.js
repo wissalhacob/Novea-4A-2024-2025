@@ -1,32 +1,10 @@
 import * as THREE from 'three';
-import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
-import { userData } from 'three/tsl';
-import { animationActive } from './person.js';
-import { animationActiveCar } from './car.js';
-function timeToMinutes(timeStr) {
-    if (!timeStr || !timeStr.includes(":")) return -1; 
-    let [hours, minutes] = timeStr.split(":");
-    return parseInt(hours) * 60 + parseInt(minutes);
-}
+
 export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); 
 
-    
-    let brasMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        metalness: 0.9,
-        roughness: 0.3
-    });
-
-    let ledMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffaa,
-        emissive: 0x000000,
-        emissiveIntensity: 0
-    });
-
-    let led;
     const supportGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1.3, 7);
     const supportMaterial = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
     const support = new THREE.Mesh(supportGeometry, supportMaterial);

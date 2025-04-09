@@ -5,8 +5,23 @@ export let animationActive = false;
 export let positionZ =null;
 export let positionX = null;
 export let positionY = null;
-
+function showSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    spinner.style.display = 'flex';
+    spinner.classList.remove('hidden');
+  }
+  
+  function hideSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    if (spinner) {
+        spinner.classList.add('hidden');
+        setTimeout(() => {
+            spinner.style.display = 'none';
+        }, 300); 
+    }
+}
 export function create_person(scene) {
+    showSpinner();
     const loader = new GLTFLoader();
     let modelGroup = null;
     let model = null;
@@ -20,6 +35,7 @@ export function create_person(scene) {
     loader.load(
         modelPath,
         (gltf) => {
+            try {
             model = gltf.scene;
             model.position.set(3, 0, -20);
             model.scale.set(1.5, 1.5, 1.5);
@@ -93,25 +109,35 @@ export function create_person(scene) {
                     child.receiveShadow = true; // Le modèle va recevoir des ombres
                 }
             });
+        } catch (error) {
+            console.error('Error processing model:', error);
+        } finally {
+            hideSpinner();
+        }
         },
         undefined,
         (error) => {
             console.error('Error loading the model:', error);
+            hideSpinner();
         }
     );
 
     // Gestion affichage/masquage via la case à cocher
     const toggleCheckbox = document.getElementById('togglePerson');
-    toggleCheckbox.addEventListener('change', () => {
-        if (modelGroup) {
-            if (toggleCheckbox.checked) {
-                model.position.set(3, 0, -20);
-                clock = new THREE.Clock();
-                animationActive = true;
-            } else {
-                animationActive = false;
-            }
-            modelGroup.visible = toggleCheckbox.checked;
-        }
-    });
+    if (toggleCheckbox) {
+        toggleCheckbox.addEventListener('change', () => {
+            showSpinner();
+            setTimeout(() => {
+                if (modelGroup) {
+                    modelGroup.visible = toggleCheckbox.checked;
+                    animationActive = toggleCheckbox.checked;
+                    if (toggleCheckbox.checked) {
+                        model.position.set(3, 0, -20);
+                        clock = new THREE.Clock();
+                    }
+                }
+                hideSpinner();
+            }, 50);
+        });
+    }
 }

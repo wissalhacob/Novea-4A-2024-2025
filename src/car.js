@@ -4,7 +4,23 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; // Charge
 // Fonction pour créer une voiture animée dans la scène
 export let animationActiveCar= false;
 export let positionZCar=null;
+function showSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    spinner.style.display = 'flex';
+    spinner.classList.remove('hidden');
+  }
+  
+  function hideSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    if (spinner) {
+        spinner.classList.add('hidden');
+        setTimeout(() => {
+            spinner.style.display = 'none';
+        }, 300); // Correspond à la durée de la transition
+    }
+}
 export function create_car(scene) {
+    showSpinner();
     const loader = new GLTFLoader(); // Création du chargeur GLTF
     let modelGroup = null; // Groupe pour gérer la voiture
     let model = null; // Référence au modèle de voiture
@@ -18,6 +34,7 @@ export function create_car(scene) {
     loader.load(
         modelPath,
         (gltf) => {
+            try {
             model = gltf.scene; // Chargement du modèle 3D
             model.position.set(-2, 0, 25); // Position de départ au début du parcours (plus loin sur l'axe Z)
             model.scale.set(2, 2, 2); // Ajustement de l'échelle du modèle
@@ -46,17 +63,26 @@ export function create_car(scene) {
                 requestAnimationFrame(animateCar); // Boucle d'animation
             }
 
+        
             animateCar(); // Démarrage de l'animation
+        } catch (error) {
+            console.error('Error processing model:', error);
+        } finally {
+            hideSpinner();
+        }
         },
         undefined,
         (error) => {
             console.error('Error loading the model:', error); // Gestion des erreurs de chargement
+            hideSpinner();
         }
     );
 
     // Gestion du bouton pour afficher/masquer la voiture
     const toggleButton = document.getElementById('toggleCar'); // Bouton pour contrôler l'affichage
     toggleButton.addEventListener('click', () => {
+        showSpinner();
+                setTimeout(() => {
         if (modelGroup) {
             if (!modelGroup.visible) { // Si la voiture est cachée
                 model.position.set(-2, 0, 25); // Réinitialisation de la position (plus loin sur l'axe Z)
@@ -67,5 +93,9 @@ export function create_car(scene) {
             }
             modelGroup.visible = !modelGroup.visible; // Inversion de la visibilité
         }
+        hideSpinner();
+                }, 50);
     });
+
+
 }

@@ -12,6 +12,25 @@ function timeToMinutes(timeStr) {
     let [hours, minutes] = timeStr.split(":");
     return parseInt(hours) * 60 + parseInt(minutes);
 }
+
+function showSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    if (spinner) {
+        spinner.style.display = 'flex';
+        spinner.classList.remove('hidden');
+    }
+  }
+  
+  function hideSpinner() {
+    const spinner = document.getElementById('spinner-overlay');
+    if (spinner) {
+        spinner.classList.add('hidden');
+        setTimeout(() => {
+            spinner.style.display = 'none';
+        }, 300);
+    }
+  }
+
 export function createRoad(scene) {
     const textureLoader = new THREE.TextureLoader();
     const lampsLeft = [];
@@ -110,6 +129,9 @@ export function createRoad(scene) {
     }
 
     function updateLamp() {
+        showSpinner();
+        setTimeout(() => {
+            try {
         const selectedLampType = document.getElementById('lampType').value;
         const selectedLongueur = document.getElementById('Longueur').value;
         const selectedFormeLumiere = document.getElementById('formeLumiere').value;
@@ -133,12 +155,29 @@ export function createRoad(scene) {
             post.lampe = lampe;
             post.solarPanel = solarPanel;
         });
+    } catch (error) {
+      console.error('Error during lamp update:', error);
+    } finally {
+      hideSpinner(); // Cacher le spinner une fois les opérations terminées
+    }
+  }, 50);
     }
 
     // **Ajout des événements pour la mise à jour dynamique des lampadaires**
-    document.getElementById('lampType').addEventListener('change', updateLamp);
-    document.getElementById('Longueur').addEventListener('change', updateLamp);
-    document.getElementById('formeLumiere').addEventListener('change', updateLamp);
+    document.getElementById('lampType').addEventListener('change', () => {
+        showSpinner();
+        setTimeout(updateLamp, 50);
+    });
+    
+    document.getElementById('Longueur').addEventListener('change', () => {
+        showSpinner();
+        setTimeout(updateLamp, 50);
+    });
+    
+    document.getElementById('formeLumiere').addEventListener('change', () => {
+        showSpinner();
+        setTimeout(updateLamp, 50);
+    });
 
 
     
@@ -318,7 +357,7 @@ export function createRoad(scene) {
             }
         }
         , 0.001); 
-
+        
 
     return {lampsLeft,lampsRight};
 }
