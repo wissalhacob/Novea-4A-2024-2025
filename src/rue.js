@@ -207,19 +207,23 @@ export function createRoad(scene) {
             if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
                 lampsLeft.forEach((lampPost) => {                              
                         lampPost.lampe.userData.rectLight.intensity = 0;
+                        lampPost.lampe.userData.spotLight.intensity = 0;
                     }   
                 );
                 lampsRight.forEach((lampPost) => {                 
                         lampPost.lampe.userData.rectLight.intensity = 0;
+                        lampPost.lampe.userData.spotLight.intensity = 0;
                     }    
                 );
             } else {
                 lampsLeft.forEach((lampPost) => {                              
                         lampPost.lampe.userData.rectLight.intensity =6;
+                        lampPost.lampe.userData.spotLight.intensity = 6;
                     }   
                 );
                 lampsRight.forEach((lampPost) => {                 
                         lampPost.lampe.userData.rectLight.intensity =6;
+                        lampPost.lampe.userData.spotLight.intensity = 6;
                     }    
                 );
             }
@@ -256,19 +260,23 @@ export function createRoad(scene) {
                                     if (lampPost.group.position.z<= positionZ) { 
 
                                         lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                        lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
                                     }   
                                     else{
                                             lampPost.lampe.userData.rectLight.intensity =  0;
+                                            lampPost.lampe.userData.spotLight.intensity = 0;
                                     }    
                             });
                     
                             lampsRight.forEach((lampPost) => {                 
                                     if (lampPost.group.position.z<= positionZ) { 
                                         lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                        lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
                                     }     
                                     else{
 
                                             lampPost.lampe.userData.rectLight.intensity =  0;
+                                            lampPost.lampe.userData.spotLight.intensity = 0;
                                 
                                     }    
                                         
@@ -281,10 +289,12 @@ export function createRoad(scene) {
                             if (lampPost.group.position.z >= positionZCar){ 
                                 console.log(lampPost.group.position.z);
                                 lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
                             }  
                             else{
    
                                     lampPost.lampe.userData.rectLight.intensity =  0;
+                                    lampPost.lampe.userData.spotLight.intensity = 0;
                             
                             }    
                                 
@@ -294,10 +304,12 @@ export function createRoad(scene) {
                     lampsRight.forEach((lampPost) => {                 
                             if (lampPost.group.position.z>= positionZCar) { 
                                 lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                                lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
                             }  
                             else{
  
                                     lampPost.lampe.userData.rectLight.intensity =  0;
+                                    lampPost.lampe.userData.spotLight.intensity = 0;
                           
                             }    
                                      
@@ -307,10 +319,12 @@ export function createRoad(scene) {
                 if (animationActive===false && animationActiveCar===false ){
                     lampsRight.forEach((lampPost) => { 
                         lampPost.lampe.userData.rectLight.intensity =  0;
+                        lampPost.lampe.userData.spotLight.intensity = 0;
                           
                    });
                    lampsLeft.forEach((lampPost) => { 
                     lampPost.lampe.userData.rectLight.intensity =  0;
+                    lampPost.lampe.userData.spotLight.intensity = 0;
                       
                });
                 }
@@ -319,20 +333,28 @@ export function createRoad(scene) {
         else if (mode === "Permanant" && isInTimeRange) {
             lampsLeft.forEach((lampPost) => {                              
                     lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                    lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
+
                 }   
             );
             lampsRight.forEach((lampPost) => {                 
                     lampPost.lampe.userData.rectLight.intensity =  (power / 100) * 12;
+                    lampPost.lampe.userData.spotLight.intensity =  (power / 100) * 12;
+
                 }    
             );
         }
         else if (mode=="Eteint" && isInTimeRange) {
             lampsLeft.forEach((lampPost) => {                              
                     lampPost.lampe.userData.rectLight.intensity =  0;
+                    lampPost.lampe.userData.spotLight.intensity =  0;
+
                 }   
             );
             lampsRight.forEach((lampPost) => {                 
                     lampPost.lampe.userData.rectLight.intensity =  0;
+                    lampPost.lampe.userData.spotLight.intensity =  0;
+
                 }    
             );
         }
