@@ -43,10 +43,13 @@ export function createRoad(scene) {
     const gltfLoader = new GLTFLoader();
     const zPositions = [-150, -30, 70, 700];
     const xOffset = 100;
+    
+    // Initialize models with animation mixers
     const villa = new Villa(scene, gltfLoader, zPositions, xOffset);
     const cat = new Cat(scene, gltfLoader, zPositions, xOffset);
     const arbre = new Arbre(scene, gltfLoader);
 
+    // Create characters with animations
     const lady1 = new Lady(
         scene, 
         gltfLoader, 
@@ -78,6 +81,7 @@ export function createRoad(scene) {
         5
     );
 
+    // Create flamingos with animations
     const flamingos = [
         new Flamingo(scene, gltfLoader, 50, -80),
         new Flamingo(scene, gltfLoader, 50, 80),
@@ -87,16 +91,16 @@ export function createRoad(scene) {
         new Flamingo(scene, gltfLoader, 55, 90),
         new Flamingo(scene, gltfLoader, 60, 60),
         new Flamingo(scene, gltfLoader, 55, -50),
-        new Flamingo(scene, gltfLoader, 60, 60),
-      
+        new Flamingo(scene, gltfLoader, 60, 60)
     ];
 
+    // Collect all animation mixers
     const allMixers = [
-        ...cat.mixers,
+        ...(cat.mixers || []),
         ...flamingos.map(f => f.mixer).filter(m => m),
-        lady1.mixer, 
-        lady2.mixer, 
-        boy.mixer
+        ...(lady1.mixer ? [lady1.mixer] : []),
+        ...(lady2.mixer ? [lady2.mixer] : []),
+        ...(boy.mixer ? [boy.mixer] : [])
     ].filter(m => m);
 
     const textureLoader = new THREE.TextureLoader();
@@ -447,18 +451,45 @@ export function createRoad(scene) {
         }
         , 0.001); 
         
-
+        function updateAnimations(delta) {
+            // Update all mixers
+            allMixers.forEach(mixer => {
+                if (mixer && typeof mixer.update === 'function') {
+                    mixer.update(delta);
+                }
+            });
+    
+            // Update specific character behaviors
+            if (cat && typeof cat.update === 'function') {
+                cat.update(delta);
+            }
+            if (lady1 && typeof lady1.update === 'function') {
+                lady1.update(delta, cat?.cats || []);
+            }
+            if (lady2 && typeof lady2.update === 'function') {
+                lady2.update(delta, cat?.cats || []);
+            }
+            if (boy && typeof boy.update === 'function') {
+                boy.update(delta, cat?.cats || []);
+            }
+            if (arbre && typeof arbre.update === 'function') {
+                arbre.update(delta);
+            }
+            
+            // Update flamingos
+            flamingos.forEach(f => {
+                if (f && typeof f.update === 'function') {
+                    f.update(delta);
+                }
+            });
+        }
     
         return {
             lampsLeft,
             lampsRight,
             mixers: allMixers,
-            updateCatAnimations: (delta) => cat.update(delta),
-            updateLadyAnimation: (delta) => lady1.update(delta, cat.cats),
-            updateLady2Animation: (delta) => lady2.update(delta, cat.cats),
-            updateBoyAnimation: (delta) => boy.update(delta, cat.cats),
-            updateTreeAnimations: (delta) => arbre.update(delta),
-            updateFlamingoAnimations: (delta) => flamingos.forEach(f => f.update(delta)),
-            cleanup: () => clearInterval(lightingUpdateInterval)
-        };
+            updateAnimations,  
+            cleanup: () => {
+                clearInterval(lightingUpdateInterval);
+            } };
 }
