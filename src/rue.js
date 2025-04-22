@@ -1,4 +1,5 @@
 import * as THREE from 'three'; 
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { create_panneaux_sol } from './panneaux_sol';
 import { create_lampes } from './lampes';
 import { create_pole } from './poles';
@@ -6,6 +7,12 @@ import { animationActive } from './person.js';
 import { animationActiveCar } from './car.js';
 import { positionZ } from './person.js';
 import { positionZCar } from './car.js';
+import { Cat } from './cat';
+import { Villa } from './villa';
+import { Lady } from './lady';
+import { Boy } from './boy';
+import { Arbre } from './arbre';
+import { Flamingo } from './flamingo';
 
 function timeToMinutes(timeStr) {
     if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
@@ -32,6 +39,66 @@ function showSpinner() {
   }
 
 export function createRoad(scene) {
+
+    const gltfLoader = new GLTFLoader();
+    const zPositions = [-150, -30, 70, 700];
+    const xOffset = 100;
+    const villa = new Villa(scene, gltfLoader, zPositions, xOffset);
+    const cat = new Cat(scene, gltfLoader, zPositions, xOffset);
+    const arbre = new Arbre(scene, gltfLoader);
+
+    const lady1 = new Lady(
+        scene, 
+        gltfLoader, 
+        '/models/source/lady.glb', 
+        -xOffset, 
+        zPositions[0] - 20, 
+        zPositions[1] - 20, 
+        5, 
+        Math.PI
+    );
+
+    const lady2 = new Lady(
+        scene,
+        gltfLoader,
+        '/models/source/lady4.glb',
+        -xOffset - 20,
+        zPositions[1] - 20,
+        zPositions[0] - 20,
+        -5,
+        0
+    );
+    
+    const boy = new Boy(
+        scene,
+        gltfLoader,
+        xOffset + 15,
+        zPositions[0] - 15,
+        zPositions[1] - 15,
+        5
+    );
+
+    const flamingos = [
+        new Flamingo(scene, gltfLoader, 50, -80),
+        new Flamingo(scene, gltfLoader, 50, 80),
+        new Flamingo(scene, gltfLoader, 60, -70),
+        new Flamingo(scene, gltfLoader, 60, 70),
+        new Flamingo(scene, gltfLoader, 55, -90),
+        new Flamingo(scene, gltfLoader, 55, 90),
+        new Flamingo(scene, gltfLoader, 60, 60),
+        new Flamingo(scene, gltfLoader, 55, -50),
+        new Flamingo(scene, gltfLoader, 60, 60),
+      
+    ];
+
+    const allMixers = [
+        ...cat.mixers,
+        ...flamingos.map(f => f.mixer).filter(m => m),
+        lady1.mixer, 
+        lady2.mixer, 
+        boy.mixer
+    ].filter(m => m);
+
     const textureLoader = new THREE.TextureLoader();
     const lampsLeft = [];
     const lampsRight = [];
@@ -361,7 +428,7 @@ export function createRoad(scene) {
            
             
     }
-
+    
         setInterval(() => {
             if (timeDisplayElement && timeDisplayElement.innerText.trim() !== "") {
                 currentTime = timeDisplayElement.innerText; 
@@ -381,5 +448,17 @@ export function createRoad(scene) {
         , 0.001); 
         
 
-    return {lampsLeft,lampsRight};
+    
+        return {
+            lampsLeft,
+            lampsRight,
+            mixers: allMixers,
+            updateCatAnimations: (delta) => cat.update(delta),
+            updateLadyAnimation: (delta) => lady1.update(delta, cat.cats),
+            updateLady2Animation: (delta) => lady2.update(delta, cat.cats),
+            updateBoyAnimation: (delta) => boy.update(delta, cat.cats),
+            updateTreeAnimations: (delta) => arbre.update(delta),
+            updateFlamingoAnimations: (delta) => flamingos.forEach(f => f.update(delta)),
+            cleanup: () => clearInterval(lightingUpdateInterval)
+        };
 }
