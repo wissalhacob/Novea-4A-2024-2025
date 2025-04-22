@@ -1,12 +1,10 @@
 import * as THREE from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
-import { createRoad } from './rue.js';
 
 export function createSky(scene, renderer) {
   let sky = new Sky();
   sky.scale.setScalar(4000);
   scene.add(sky);
-  const { lampsLeft, lampsRight } = createRoad(scene);
 
   let sun = new THREE.Vector3();
   let ambientLight = new THREE.AmbientLight(0x222222, 0.5);
