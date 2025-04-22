@@ -1,4 +1,3 @@
-// Importation des fonctions nécessaires
 import * as THREE from 'three';
 import { createScene } from './scene'; 
 import { createRoad } from './rue';

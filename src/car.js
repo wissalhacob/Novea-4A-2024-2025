@@ -1,7 +1,6 @@
-import * as THREE from 'three'; // Importation de la bibliothèque Three.js
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; // Chargement du module pour importer des modèles GLTF
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-// Fonction pour créer une voiture animée dans la scène
 export let animationActiveCar= false;
 export let positionZCar=null;
 function showSpinner() {

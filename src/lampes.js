@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'; 
 
+
 export function create_lampes(scene, typeBras, longueur, formeLumiere) {
     const loader = new GLTFLoader();
     const lampGroup = new THREE.Group(); 
