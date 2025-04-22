@@ -19,9 +19,9 @@ function main() {
         updateLadyAnimation, 
         updateLady2Animation,
         updateBoyAnimation,
-        updateTreeAnimations,updateFlamingoAnimations
+        updateTreeAnimations
     } = createRoad(scene);
-    
+
     const clock = new THREE.Clock();
     function animate() {
         renderer.render(scene, camera);
@@ -60,9 +60,7 @@ function main() {
             if (typeof updateTreeAnimations === 'function') {
                 updateTreeAnimations(delta);
             }
-            if (updateFlamingoAnimations) {
-                updateFlamingoAnimations(delta);
-            }
+          
             // Rendu de la scène
             renderer.render(scene, camera);
             requestAnimationFrame(animate);

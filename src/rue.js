@@ -12,7 +12,6 @@ import { Villa } from './villa';
 import { Lady } from './lady';
 import { Boy } from './boy';
 import { Arbre } from './arbre';
-import { Flamingo } from './flamingo';
 
 function timeToMinutes(timeStr) {
     if (!timeStr || !timeStr.includes(":")) return -1; // Retourne -1 si la valeur est invalide
@@ -81,23 +80,10 @@ export function createRoad(scene) {
         5
     );
 
-    // Create flamingos with animations
-    const flamingos = [
-        new Flamingo(scene, gltfLoader, 50, -80),
-        new Flamingo(scene, gltfLoader, 50, 80),
-        new Flamingo(scene, gltfLoader, 60, -70),
-        new Flamingo(scene, gltfLoader, 60, 70),
-        new Flamingo(scene, gltfLoader, 55, -90),
-        new Flamingo(scene, gltfLoader, 55, 90),
-        new Flamingo(scene, gltfLoader, 60, 60),
-        new Flamingo(scene, gltfLoader, 55, -50),
-        new Flamingo(scene, gltfLoader, 60, 60)
-    ];
 
     // Collect all animation mixers
     const allMixers = [
         ...(cat.mixers || []),
-        ...flamingos.map(f => f.mixer).filter(m => m),
         ...(lady1.mixer ? [lady1.mixer] : []),
         ...(lady2.mixer ? [lady2.mixer] : []),
         ...(boy.mixer ? [boy.mixer] : [])
@@ -476,12 +462,7 @@ export function createRoad(scene) {
                 arbre.update(delta);
             }
             
-            // Update flamingos
-            flamingos.forEach(f => {
-                if (f && typeof f.update === 'function') {
-                    f.update(delta);
-                }
-            });
+        
         }
     
         return {

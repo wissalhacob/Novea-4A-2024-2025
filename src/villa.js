@@ -13,7 +13,11 @@ export class Villa {
             villa.scale.set(4, 4, 4);
             this.applyRandomColors(villa);
 
-            zPositions.forEach(z => {
+            // Limiter le nombre de villas à créer
+            const maxVillas = 3;  // Par exemple, créer seulement 3 villas
+            const limitedZPositions = zPositions.slice(0, maxVillas); // Prenez seulement les premières positions
+
+            limitedZPositions.forEach(z => {
                 const leftVilla = this.createVillaClone(villa, -xOffset - 50, z - 5, Math.PI / 2);
                 const rightVilla = this.createVillaClone(villa, xOffset + 60, z - 10, -Math.PI / 2);
                 this.scene.add(leftVilla);
