@@ -40,7 +40,34 @@ cd nom-du-repo
 npm install
 npm run dev
 ```
+## ⚠️ Problème courant : nvm non reconnu (Node.js)
+### Si vous rencontrez l’erreur suivante lors de l’exécution des commandes nvm install ou nvm use :
+```
+nvm : The term 'nvm' is not recognized as a name of a cmdlet, function, script file, or executable program.
+```
+### ➡️ Pas de panique ! C’est simplement que nvm (Node Version Manager) n’est pas encore installé sur votre système Windows.
 
+### ✅ Solution : Installer nvm-windows
+### Allez sur la page GitHub officielle :
+👉 https://github.com/coreybutler/nvm-windows/releases
+
+### Téléchargez le fichier nvm-setup.exe et installez-le.
+
+### Fermez et rouvrez votre terminal (PowerShell ou CMD).
+
+### Ensuite, installez et activez la version recommandée de Node.js pour ce projet :
+```
+nvm install 10.8.0
+nvm use 10.8.0
+```
+### Vérifiez que la bonne version est utilisée :
+```
+node -v  # doit afficher v10.8.0
+```
+### Lancez enfin le projet :
+```
+npm run dev
+```
 ## 🚶 Fonctionnalités dynamiques
 
 Déplacement réaliste des personnages (orientation du visage)
