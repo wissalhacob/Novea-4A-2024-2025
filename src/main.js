@@ -80,4 +80,9 @@ function main() {
     });
 
    
+<<<<<<< HEAD
+=======
+
+// Exécuter l'application
+>>>>>>> 616841cf5fec9086d5c6d119f43f0aaaf13343b5
 main();
