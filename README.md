@@ -50,7 +50,7 @@ Interface interactive avec personnalisation de chaque lampe
 
 ## 📦 Versions utilisées 
 
-
+```
 {
   "dependencies": {
     "dat.gui": "^0.7.9",
@@ -62,7 +62,7 @@ Interface interactive avec personnalisation de chaque lampe
     "vite": "^6.0.11"
   }
 }
-
+```
 ## 🧪 Défis techniques & solutions
 
 Navigation manuelle	Utilisation de OrbitControls de Three.js
