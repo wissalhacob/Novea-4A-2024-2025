@@ -1,3 +1,10 @@
+![image](https://github.com/user-attachments/assets/3f2c4106-d064-4252-abb5-084361c89e6d)
+
+
+
+
+
+
 # 🌃 Projet NOVEA – Simulation 3D d’Éclairage Public Intelligent
 ## 📜 Description du projet
 Ce projet, réalisé en partenariat avec NOVEA Énergies, consiste en la simulation interactive d’un système d’éclairage public intelligent implanté dans la rue Johann Gregor Mendel à Beaucouzé.
@@ -34,7 +41,7 @@ npm install
 npm run dev
 ```
 
-##🚶 Fonctionnalités dynamiques
+## 🚶 Fonctionnalités dynamiques
 
 Déplacement réaliste des personnages (orientation du visage)
 Apparition aléatoire des chats avec mouvement
