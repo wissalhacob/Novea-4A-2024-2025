@@ -1,52 +1,68 @@
 🌃 Projet NOVEA – Simulation 3D d’Éclairage Public Intelligent
 📜 Description du projet
-Ce projet, réalisé en partenariat avec NOVEA Énergies, consiste en la simulation interactive d’un système d’éclairage public intelligent implanté dans la rue Johann Gregor Mendel à Beaucouzé.
-Il repose sur une approche consistant à moduler l’intensité lumineuse des lampadaires en fonction :
-de la présence de véhicules et de piétons détectés en temps réel,
-ainsi que d’un programme horaire structuré en cinq phases, représentant les différentes périodes d’une journée.
-L’objectif principal est de permettre la visualisation et l’évaluation des stratégies d’éclairage via un rendu web 3D dynamique développé avec Three.js. L’environnement modélisé intègre :
-des entités animées (personnages, véhicules, chats),
+Ce projet, réalisé en partenariat avec NOVEA Énergies, propose une simulation interactive 3D d’un système d’éclairage public intelligent situé rue Johann Gregor Mendel à Beaucouzé.
+
+Il repose sur une modulation dynamique de la lumière des lampadaires selon :
+
+la présence de piétons et de véhicules détectés en temps réel,
+
+un programme horaire structuré en 5 phases journalières.
+
+Le rendu web 3D est réalisé avec Three.js et intègre :
+
+des entités dynamiques (personnages, chats, véhicules),
+
 des lampadaires paramétrables,
-une interface utilisateur ergonomique permettant de configurer les phases d’éclairage et les scénarios.
 
+une interface utilisateur interactive pour tester les scénarios d’éclairage.
+
+👥 Membres de l’équipe
+
+Nom	Rôle
+Oumaima Kaadade	Développement 3D, animations
+Autres membres	UI, modélisation, intégration
 🧰 Technologies utilisées
-🔧 Technologies
-Three.js – Moteur de rendu 3D
-HTML / CSS / JavaScript
-Blender – Modélisation des objets 3D
-Sketchfab – Récupération de modèles
-Git & GitHub – Suivi de version
+Three.js – moteur de rendu 3D
 
-🏗️ Structure du code
-Organisation modulaire :
-main.js, rue.js, lampes.js, sky.js...
-Communication inter-modules via import/export de fonctions
+Blender – modélisation 3D
+
+HTML, CSS, JavaScript
+
+Git & GitHub – versioning
+
+Sketchfab – récupération de modèles
+
+🧱 Structure du code
+bash
+Copier
+Modifier
+src/
+├── main.js        # Initialisation de la scène
+├── rue.js         # Modélisation de la rue
+├── lampes.js      # Gestion des lampadaires
+├── sky.js         # Ciel et cycle jour/nuit
+📦 Communication via import/export de fonctions entre modules.
+
 🚀 Lancer le projet localement
-
-Cloner le projet
-
 bash
 Copier
 Modifier
 git clone https://github.com/votre-utilisateur/nom-du-repo.git
 cd nom-du-repo
-Installer les dépendances et exécuter en local (si bundler comme Vite/Webpack)
-
-bash
-Copier
-Modifier
 npm install
 npm run dev
+💡 Ou simplement ouvrir index.html dans un navigateur moderne.
 
-🚶 Fonctionnalités dynamiques
-
+🎮 Fonctionnalités dynamiques
 Déplacement réaliste des personnages (orientation du visage)
-Apparition aléatoire des chats avec mouvement
-Éclairage selon horaires et détection
-Interface interactive avec personnalisation de chaque lampe
 
-📦 Versions utilisées 
+Apparition aléatoire de chats animés
 
+Éclairage dynamique selon horaires et détection
+
+Interface utilisateur de personnalisation des lampadaires
+
+📦 Versions utilisées
 json
 Copier
 Modifier
@@ -61,17 +77,14 @@ Modifier
     "vite": "^6.0.11"
   }
 }
-
 🧪 Défis techniques & solutions
 
+Défi	Solution
 Navigation manuelle	Utilisation de OrbitControls de Three.js
-Détection	Remplacement du raycasting par détection via positionZ
-Modèles lourds	Réduction des résolutions + compression
-Cycle jour/nuit	Simulation du soleil via une fonction sinusoïdale, et apparition des étoiles après le coucher.
-
+Détection	Remplacement du raycasting par détection sur positionZ
+Modèles lourds	Réduction de résolution + compression
+Cycle jour/nuit	Fonction sinusoïdale + apparition d’étoiles après le coucher du soleil
 🐞 Bugs connus
+Le code se bloque lorsqu’un trop grand nombre d’objets animés est ajouté.
 
-Le code se bloque lorsqu’un grand nombre d’objets animés sont ajoutés
-
-Légère latence si trop de paramètres sont modifiés rapidement
-
+Légère latence si trop de paramètres sont modifiés rapidement.
