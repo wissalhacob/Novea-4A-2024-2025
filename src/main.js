@@ -31,39 +31,38 @@ function main() {
 
         // Mise à jour de toutes les animations
         try {
-            // Animations des mixers (pour les modèles GLTF animés)
-            if (mixers && Array.isArray(mixers)) {
-                mixers.forEach(mixer => {
-                    if (mixer && typeof mixer.update === 'function') {
-                        mixer.update(delta);
-                    }
-                });
-            }
+            // // Animations des mixers (pour les modèles GLTF animés)
+            // if (mixers && Array.isArray(mixers)) {
+            //     mixers.forEach(mixer => {
+            //         if (mixer && typeof mixer.update === 'function') {
+            //             mixer.update(delta);
+            //         }
+            //     });
+            // }
 
-            // Animations spécifiques
-            if (typeof updateCatAnimations === 'function') {
-                updateCatAnimations(delta);
-            }
+            // // Animations spécifiques
+            // if (typeof updateCatAnimations === 'function') {
+            //     updateCatAnimations(delta);
+            // }
 
-            if (typeof updateLadyAnimation === 'function') {
-                updateLadyAnimation(delta);
-            }
+            // if (typeof updateLadyAnimation === 'function') {
+            //     updateLadyAnimation(delta);
+            // }
 
-            if (typeof updateLady2Animation === 'function') {
-                updateLady2Animation(delta);
-            }
+            // if (typeof updateLady2Animation === 'function') {
+            //     updateLady2Animation(delta);
+            // }
 
-            if (typeof updateBoyAnimation === 'function') {
-                updateBoyAnimation(delta);
-            }
+            // if (typeof updateBoyAnimation === 'function') {
+            //     updateBoyAnimation(delta);
+            // }
 
-            if (typeof updateTreeAnimations === 'function') {
-                updateTreeAnimations(delta);
-            }
+            // if (typeof updateTreeAnimations === 'function') {
+            //     updateTreeAnimations(delta);
+            // }
           
-            // Rendu de la scène
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
+            // renderer.render(scene, camera);
+            // requestAnimationFrame(animate);
             
         } catch (error) {
             console.error("Error in animation loop:", error);
@@ -81,6 +80,4 @@ function main() {
     });
 
    
-
-// Exécuter l'application
 main();
