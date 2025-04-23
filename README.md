@@ -49,8 +49,9 @@ nvm : The term 'nvm' is not recognized as a name of a cmdlet, function, script f
 
 ### ✅ Solution : Installer nvm-windows
 ### 1.Allez sur la page GitHub officielle :
+```
 👉 https://github.com/coreybutler/nvm-windows/releases
-
+```
 ### 2.Téléchargez le fichier nvm-setup.exe et installez-le.
 
 ### 3.Fermez et rouvrez votre terminal (PowerShell ou CMD).
