@@ -103,3 +103,15 @@ Cycle jour/nuit	Simulation du soleil via une fonction sinusoïdale, et apparitio
 Le code se bloque lorsqu’un grand nombre d’objets animés sont ajoutés
 
 Légère latence si trop de paramètres sont modifiés rapidement
+
+## 🚀 Accès à l'application
+
+### 💻 PC performant
+→ Accès direct au module principal via Main.
+
+### 🖥️ PC moins performant
+→ Utilisez LumiereFF pour :
+    • 🌍 Visualiser l’environnement
+    • ⚙️ Accéder aux fonctionnalités essentielles via le mode Dev
+
+
